@@ -8,13 +8,12 @@ package dataStructure;
 *
 * Support following operations:
 * Insert(S, x): insert a element x to S
-* Maximum(S): get the largest key in the S
-* Extract-Max(S): removes and returns the element with largest key
-* Increase-Key(S, x, k): increase the value of x's key to the new value: k
+* Minimum(S): get the smallest key in the S
+* Extract-Min(S): removes and returns the element with smallest key
+* Decrease-Key(S, x, k): decrease the value of x's key to the new value: k
 *
 * */
-
-public class MaxPriorityQueue {
+public class MinPriorityQueue {
 
     public int[] m_num;
     public int m_heapSize;
@@ -31,52 +30,52 @@ public class MaxPriorityQueue {
         return 2 * i + 2;
     }
 
-    public MaxPriorityQueue(int[] num) {
+    public MinPriorityQueue(int[] num) {
         m_heapSize = num.length;
         m_num = num;
         for (int i = m_heapSize/2; i >= 0 ; i --) {
-            maxHeap(i);
+            minHeap(i);
         }
     }
 
-    public void maxHeap(int i) {
+    public void minHeap(int i) {
         int left = left(i);
         int right = right(i);
 
-        int maxNo;
-        if ( (left < m_heapSize) && (m_num[left] > m_num[i]) )  {
-            maxNo = left;
+        int minNo;
+        if ( (left < m_heapSize) && (m_num[left] < m_num[i]) ) {
+            minNo = left;
         }
         else
-            maxNo = i;
-        if ( (right < m_heapSize) && (m_num[right] > m_num[maxNo]))
-            maxNo = right;
+            minNo = i;
+        if ( (right < m_heapSize) && (m_num[right] < m_num[minNo]))
+            minNo = right;
 
-        if (maxNo != i) {
-            int tmp = m_num[maxNo];
-            m_num[maxNo] = m_num[i];
+        if (minNo != i) {
+            int tmp = m_num[minNo];
+            m_num[minNo] = m_num[i];
             m_num[i] = tmp;
 
-            maxHeap(maxNo);
+            minHeap(minNo);
         }
     }
 
-    public int getMaxElement() {
+    public int getMinElement() {
         return m_num[0];
     }
 
-    public int extractMaxElement() {
+    public int extractMinElement() {
         int res = m_num[0];
         m_num[0] = m_num[m_heapSize-1];
         m_heapSize --;
-        maxHeap(0);
-
+        minHeap(0);
         return res;
     }
 
-    public void increaseKey(int i, int newkey) {
-        m_num[i] = newkey;
-        while ((i >= 0) && (m_num[parent(i)] < m_num[i])) {
+    public void decreaseKey(int i , int key) {
+        m_num[i] = key;
+
+        while ( (i >= 0) && (m_num[parent(i)] > m_num[i])) {
             int parent = parent(i);
             int tmp = m_num[parent];
             m_num[parent] = m_num[i];
@@ -88,24 +87,25 @@ public class MaxPriorityQueue {
 
     public void insertElement(int key) {
         int[] newnum = new int[m_heapSize+1];
-        for (int i = 0 ; i < m_heapSize ; i ++) {
+        for (int i = 0 ; i < m_heapSize; i ++) {
             newnum[i] = m_num[i];
         }
-        newnum[m_heapSize] = Integer.MIN_VALUE;
+        newnum[m_heapSize] = Integer.MAX_VALUE;
         m_num = newnum;
-        increaseKey(m_heapSize, key);
+
+        decreaseKey(m_heapSize, key);
         m_heapSize ++;
     }
 
     public static void main(String[] args) {
         int[] nums = new int[]{1,4,2,5,7,0};
-        MaxPriorityQueue ob = new MaxPriorityQueue(nums);
-        // Important !!!: Find k top largest elements: Time : (O(n) + O(k * logn))
+        MinPriorityQueue ob = new MinPriorityQueue(nums); // buildHeap: O(n)
+
+        // Important !!!! Find k smallest Elements: Time : (O(n) + O(k * logn))
         int k = 3;
         int[] res = new int[k];
-        for (int i = 0 ; i < k ; i ++) {
-            res[i] = ob.extractMaxElement();
+        for (int i = 0 ; i < k ; i ++) { // k iterations
+            res[i] = ob.extractMinElement(); // O(logn)
         }
     }
-
 }

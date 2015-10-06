@@ -28,6 +28,7 @@ public class MeetRooms {
         return true;
     }
 
+    // IMPORTANT !!!
     public int minMeetingRooms(Interval[] intervals) {
         IntervalComparator comparator = new IntervalComparator();
         Arrays.sort(intervals, comparator);
@@ -39,7 +40,8 @@ public class MeetRooms {
             int index = findCompatibleActivity(endTimes, time);
             if (index != -1) {
                 // merge this interval with finded compatible interval
-                // if a new interval want to merge with it, its start time need to be larger than this                  //  interval's end time
+                // if a new interval want to merge with it, its start time need to be larger than this
+                //   interval's end time
                 endTimes.set(index, intervals[i].end);
             }
             else {
