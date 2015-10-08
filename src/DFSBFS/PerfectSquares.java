@@ -18,9 +18,29 @@ public class PerfectSquares {
 
     public int numSquares(int n) {
         Queue<Integer> queue = new LinkedList<Integer>();
-        for (int i = 0 ; i * i < n; i ++) {
+        Queue<Integer> dist = new LinkedList<Integer>();
+        dist.offer(0);
+        queue.offer(n);
 
+        while ( ! queue.isEmpty()) {
+            int element = queue.poll();
+            int d = dist.poll();
+            int sq = (int)Math.sqrt((double)element);
+            for (int i = sq; i > 0 ; i--) {
+                int sqrt = i * i;
+                int restVl = element - sqrt;
+                if (restVl == 0) return (d + 1);
+                else if (restVl > 0) {
+                    queue.offer(restVl);
+                    dist.offer(d + 1);
+                }
+            }
         }
+        return 0;
+    }
 
+    public static void main(String[] args) {
+        PerfectSquares squares = new PerfectSquares();
+        System.out.println(squares.numSquares(13));
     }
 }
