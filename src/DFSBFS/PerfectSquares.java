@@ -16,27 +16,54 @@ import java.util.Queue;
 * */
 public class PerfectSquares {
 
+    public class Square {
+        int val;
+        int dist;
+
+        public Square(int val, int dist) {
+            this.val = val;
+            this.dist = dist;
+        }
+    }
+
     public int numSquares(int n) {
-        Queue<Integer> queue = new LinkedList<Integer>();
-        Queue<Integer> dist = new LinkedList<Integer>();
-        dist.offer(0);
-        queue.offer(n);
+        Queue<Square> queue = new LinkedList<Square>();
+        queue.offer(new Square(n, 0));
 
         while ( ! queue.isEmpty()) {
-            int element = queue.poll();
-            int d = dist.poll();
-            int sq = (int)Math.sqrt((double)element);
+            Square element = queue.poll();
+            int d = element.dist;
+            int val = element.val;
+            int sq = (int)Math.sqrt((double)val);
             for (int i = sq; i > 0 ; i--) {
                 int sqrt = i * i;
-                int restVl = element - sqrt;
-                if (restVl == 0) return (d + 1);
+                int restVl = val - sqrt;
+                if (restVl == 0) return (d + 1); // BFS property
                 else if (restVl > 0) {
-                    queue.offer(restVl);
-                    dist.offer(d + 1);
+                    queue.offer(new Square(restVl, (d+1)));
                 }
             }
         }
         return 0;
+    }
+
+    public int numSquares_2(int n) {
+        int[] minNum = new int[n+1];
+        int len = (int) Math.sqrt((double) n);
+
+        for (int i = 1; i <= len; i ++) {
+            minNum[i * i] = 1;
+        }
+        for (int i = 2; i <= n ; i ++) {
+            int mid = (int) Math.sqrt((double) i);
+            int minCount = n;
+            for (int j = 1; j <= mid; j++) {
+                int val = j * j;
+                minCount = Math.min(minNum[val], minNum[n - val]);
+            }
+            minNum[i] = minCount;
+        }
+        return minNum[n];
     }
 
     public static void main(String[] args) {
