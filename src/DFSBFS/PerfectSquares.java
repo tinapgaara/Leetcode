@@ -59,7 +59,7 @@ public class PerfectSquares {
             int minCount = n;
             for (int j = 1; j <= mid; j++) {
                 int val = j * j;
-                minCount = Math.min(minNum[val], minNum[n - val]);
+                minCount = Math.min(minCount, (minNum[val]+minNum[i - val]));
             }
             minNum[i] = minCount;
         }
