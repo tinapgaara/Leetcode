@@ -59,7 +59,7 @@ public class BucketSort {
         // insert num[i] to buckets : under uniform distribution: O(n)
         for (int i = 0 ; i < doubleNums.length ; i ++) {
             double dNum = doubleNums[i];
-            int insertBucketNo = (int) (nums.length * dNum); // Important !!!! reover double to int : nums.length * double
+            int insertBucketNo = (int) (nums.length * dNum); // Important !!!! recover double to int : nums.length * double
             buckets[insertBucketNo].insert(dNum);
         }
 

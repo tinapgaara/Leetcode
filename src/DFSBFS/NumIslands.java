@@ -12,7 +12,7 @@ import java.awt.Point;
  */
 public class NumIslands {
 
-    // For consecutive '1' in grid, using DFS rather than BFS
+    // Calculate disconjunct forest and number of forests.
     public int numIslands(char[][] grid) {
         if (grid == null) {
             return 0;

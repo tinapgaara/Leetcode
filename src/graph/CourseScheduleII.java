@@ -65,34 +65,28 @@ public class CourseScheduleII {
 
     public boolean DFS(Map<Integer, List<Node>> map, int[] visitedFlags, Node cur,
                        List<Integer> order) {
-        time ++;
+        time++;
         cur.startTime = time;
-        int nodeNo = cur.nodeNo;
-        visitedFlags[nodeNo] = 1;
-        boolean res = true;
-        List<Node> neighbors = map.get(nodeNo);
-        if ( (neighbors == null) || (neighbors.size() == 0) ) {
-            visitedFlags[nodeNo] = 2;
-            time ++;
-            cur.finishTime = time;
-            order.add(0, nodeNo);
-            return res;
-        }
-        for (Node node: neighbors) {
-            int anotherNodeNo = node.nodeNo;
-            if (visitedFlags[anotherNodeNo] == 0) {
-                res = DFS(map, visitedFlags, node, order);
-                if (!res) return false;
-            } else if (visitedFlags[anotherNodeNo] == 1) {
-                visitedFlags[nodeNo] = 2;
-                return false;
+        visitedFlags[cur.nodeNo] = 1;
+        List<Node> neighbors = map.get(cur.nodeNo);
+        System.out.println(cur.nodeNo);
+        if ((neighbors != null) && (neighbors.size() > 0) ){
+            for (Node neighbor: neighbors) {
+                if (visitedFlags[neighbor.nodeNo] == 0) {
+                    if (! DFS(map, visitedFlags, neighbor, order)) return false;
+                }
+                else if (visitedFlags[neighbor.nodeNo] == 1){
+                    visitedFlags[neighbor.nodeNo] = 2;
+                    return false;
+                }
             }
         }
-        visitedFlags[nodeNo] = 2;
+        visitedFlags[cur.nodeNo] = 2;
         time ++;
         cur.finishTime = time;
-        order.add(0, nodeNo);
-        return res;
+        System.out.println(cur.nodeNo + "," + time);
+        order.add(0, cur.nodeNo);
+        return true;
     }
 
     public Graph buildGraph(int[][] prerequisites) {
@@ -151,8 +145,8 @@ public class CourseScheduleII {
 
     public static void main(String[] args) {
         CourseScheduleII ob = new CourseScheduleII();
-        int[][] p = new int[][]{{0,2},{1,2},{2,0}};
-        int[] a = ob.findOrder(3, p);
+        int[][] p = new int[][]{{0,1}};
+        int[] a = ob.findOrder(2, p);
         for (int i = 0 ; i < a.length; i ++)
             System.out.println(a[i]);
     }
