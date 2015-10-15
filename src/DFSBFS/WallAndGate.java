@@ -20,10 +20,14 @@ public class WallAndGate {
         for (int i = 0 ; i < row; i ++) {
             for (int j = 0; j < col; j ++) {
                 if (rooms[i][j] == 0) {
+                    // If put here, every loop intialization a flags, this takes a lot of time !!
+                    // boolean[][] visitedFlags = new boolean[row][col];
                     gateQueues.offer(new Point(i, j, 0)); // no BFS in double loop
                 }
             }
         }
+        // Very Very important !!!!  BFS can start after loop.
+        // Scan all gates at once time.
         BFS(rooms, gateQueues, visitedFlags);
     }
 

@@ -1,4 +1,4 @@
-package sum;
+package twoPointers.sum;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +26,7 @@ public class TwoSumDataStructure {
             m_map.put(number,  1);
     }
 
-    // Find if there exists any pair of numbers which sum is equal to the value.
+    // Find if there exists any pair of numbers which twoPointers.sum is equal to the value.
     public boolean find(int value) {
         for (Map.Entry<Integer, Integer> entry : m_map.entrySet()) {
             int count = entry.getValue().intValue();

@@ -54,7 +54,7 @@ public class MaxSubarray {
     }
 
     // Solution 2: DP
-    // We should ignore the previous sum if current element's value is larger than that sum
+    // We should ignore the previous twoPointers.sum if current element's value is larger than that twoPointers.sum
     // Also, keep tracking all possible maxium during each step.
     public int maxSubArray_DP(int[] nums) {
         if ( (nums == null) || (nums.length == 0) ) {
@@ -75,7 +75,7 @@ public class MaxSubarray {
     }
 
     // Solution 3: Kadane alg
-    // Assume: at least one positive number in arr. so when sum < 0, reset to be zero
+    // Assume: at least one positive number in arr. so when twoPointers.sum < 0, reset to be zero
     public int maxSubArray_Kadane(int[] nums) {
         int curSum = 0;
         int maxSum = Integer.MIN_VALUE;

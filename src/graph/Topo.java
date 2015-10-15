@@ -139,7 +139,7 @@ public class Topo {
     }
 
     public static void main(String[] args) {
-        String[] words = {"wrt", "wrf","er","ett","rftt"};
+        String[] words = {"zy","zx"};
         //String[] words = {"a", "b"};
         Topo ob = new Topo();
         System.out.println("result:" + ob.alienOrder(words));

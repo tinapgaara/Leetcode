@@ -1,5 +1,6 @@
 package graph;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -21,6 +22,10 @@ public class Node {
         mPi = pi;
     }
 
+    public Node(int val) {
+        mVal = val;
+    }
+
     public Node(int val, int dist, Node pi, int color) {
         mVal = val;
         mDist = dist;
@@ -34,5 +39,14 @@ public class Node {
         mFinish = finish;
         mPi = pi;
         mColor = color;
+    }
+
+    public static void main(String[] args) {
+        HashMap<Node, Node> map = new HashMap<>();
+        Node n1 = new Node(2);
+        Node n2 = new Node(3);
+        map.put(n1, n2);
+        System.out.println(map.get(n1));
+
     }
 }

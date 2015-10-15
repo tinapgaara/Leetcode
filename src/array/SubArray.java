@@ -17,31 +17,31 @@ public class SubArray {
         int end = 0;
 
         int minLen = Integer.MAX_VALUE;
-        int sum = 0;
+        int twoPointers.sum = 0;
 
         int len = nums.length;
         int tmpLen = 0;
         while(start < len) {
 
-            System.out.println(sum);
-            if ((sum >= s) && (tmpLen < minLen)) {
+            System.out.println(twoPointers.sum);
+            if ((twoPointers.sum >= s) && (tmpLen < minLen)) {
                 minLen = Math.min(minLen, tmpLen);
                 tmpLen = 0;
                 start ++;
                 end = start;
-                sum = 0;
+                twoPointers.sum = 0;
             }
             else if (tmpLen >= minLen) {
                 tmpLen = 0;
                 start ++;
                 end = start;
-                sum = 0;
+                twoPointers.sum = 0;
             }
-            else if (sum < s) {
+            else if (twoPointers.sum < s) {
                 if (end >= len) {
                     break;
                 }
-                sum = sum + nums[end];
+                twoPointers.sum = twoPointers.sum + nums[end];
                 end ++;
                 tmpLen ++;
             }

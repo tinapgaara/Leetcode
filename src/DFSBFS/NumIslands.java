@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-
 import java.awt.Point;
 
 /**
@@ -23,27 +22,28 @@ public class NumIslands {
         boolean[][] visitedFlags = new boolean[row][col];
         int num = 0;
         for (int i = 0 ; i < row; i ++) {
-            for (int j = 0; j < col; j ++) {
-                if ((grid[i][j] == '1') && (! visitedFlags[i][j])) {
-                    DFS(grid, i, j, visitedFlags);
+            for (int j = 0 ; j < col; j ++) {
+                // Pay attention: DFS, the first loop need to use visitedFlags and judge it
+                if ((grid[i][j] == '1') && ( !visitedFlags[i][j])) {
+                    DFS(i, j, grid, visitedFlags);
                     num ++;
                 }
             }
         }
         return num;
     }
-
-    public void DFS(char[][] grid, int x, int y, boolean[][] visitedFlags) {
-        if ((x >=0) && (x < grid.length) && (y >= 0) && (y < grid[0].length)
-                && (! visitedFlags[x][y])) {
-            char ch = grid[x][y];
-
-            if (ch == '1') {
+    public void DFS(int x, int y, char[][] grid, boolean[][] visitedFlags) {
+        if ((x >= 0) && (x < grid.length) && (y >=0) && (y < grid[0].length)) {
+            // Important !!! need to judge 1 here
+            if ((!visitedFlags[x][y]) && (grid[x][y] == '1')){ // grid's DFS is different format from graph's DFS
+                // Important !!!!: set to be true before DFS others !!!!
                 visitedFlags[x][y] = true;
-                DFS(grid, x-1, y, visitedFlags);
-                DFS(grid, x+1, y, visitedFlags);
-                DFS(grid, x, y-1, visitedFlags);
-                DFS(grid, x, y+1, visitedFlags);
+
+                DFS(x-1, y, grid, visitedFlags);
+                DFS(x, y-1, grid, visitedFlags);
+                DFS(x+1, y, grid, visitedFlags);
+                DFS(x, y+1, grid, visitedFlags);
+
             }
         }
     }

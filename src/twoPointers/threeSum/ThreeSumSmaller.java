@@ -1,4 +1,4 @@
-package threeSum;
+package twoPointers.threeSum;
 
 import java.util.Arrays;
 
