@@ -17,8 +17,17 @@ The first line contains the number of test cases T. Each of the next T lines con
 Output:
 Output T lines. Each line contains the required answer for the corresponding
 *
+* Solution: use DP
+* store [i, j, k] where the number is i digits, and sum of i digits = j, and sum of square of i digits = k.
+* luckNum(a,b) = luckyNum(0, b) - luckyNum(0, a-1)
 *
+* Question:
+* How to calculate luckyNum(0,b) ?
 *
 * */
 public class LuckyNumber {
+
+    public int luckyNum(int a, int b) {
+
+    }
 }

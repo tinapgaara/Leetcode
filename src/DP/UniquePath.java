@@ -17,6 +17,7 @@ How many possible unique paths are there?
 public class UniquePath {
 
     public int uniquePaths(int m, int n) {
+        // How to achieve this in space O(n) ?
         int[][] uniqueNums = new int[m][n];
         for (int i = 0 ; i < m; i ++) {
             uniqueNums[i][0] = 1;
