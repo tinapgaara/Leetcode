@@ -21,4 +21,8 @@ Output T lines. Each line contains the required answer for the corresponding
 *
 * */
 public class LuckyNumber {
+
+    public int luckyNum(int a, int b) {
+
+    }
 }

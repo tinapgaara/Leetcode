@@ -1,9 +1,5 @@
 package trie;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by yingtan on 9/23/15.
@@ -18,7 +14,7 @@ public class WordDictionary {
 
         public TrieNode(char ch) {
             this.ch = ch;
-            childrens = new TrieNode[26];
+            childrens = new TrieNode[27]; // Important !!! use 27 length
             isStop = false;
         }
     }
@@ -31,19 +27,21 @@ public class WordDictionary {
     public void addWord(String word) {
         if ((word == null) || (word.length() == 0)) return;
         TrieNode copy = root;
-
-        for (int i = 0 ; i < word.length(); i ++) {
-            int pos = word.charAt(i) - 'a';
-
+        while (!copy.isStop) {
+            int pos = word.charAt(0) - 'a';
             if (copy.childrens[pos] == null) {
-                TrieNode newnode = new TrieNode(word.charAt(i));
+                TrieNode newnode = new TrieNode(word.charAt(0));
                 copy.childrens[pos] = newnode;
             }
-            if (i == word.length() - 1) {
-                copy.isStop = true;
-            } else {
-                copy.isStop = false;
-                copy = copy.childrens[pos];
+            word = word.substring(1);
+            copy = copy.childrens[pos];
+            if (word.length() == 0) {
+                // Important !!!!!  add $ as terminator : last node
+                TrieNode terminator = new TrieNode('$');
+                terminator.isStop = true;
+                copy.childrens[26] = terminator;
+
+                break;
             }
         }
     }
@@ -53,50 +51,57 @@ public class WordDictionary {
     public boolean search(String word) {
         if ((word == null) || (word.length() == 0)) return false;
 
-        return recurSearch(root, word, 0);
+        return recurSearch(root, (word+"$"), 0); // Important !!! word + $
     }
 
     public boolean recurSearch(TrieNode cur, String word, int index) {
         if (index >= word.length()) return false;
+        if (word.charAt(index) == '$') {
+            // Important : judge $ here
+            if ((cur.childrens[26] != null) && (cur.childrens[26].ch == '$')) return true;
+            else return false; // Important return false here, or out of boundary
+        }
         TrieNode copy = cur;
         char ch = word.charAt(index);
         if (ch == '.') {
             for (int i = 0; i < copy.childrens.length; i++) {
                 if ((copy.childrens[i] != null) && (!copy.isStop)) {
-                    System.out.println(copy.childrens[i].ch);
-                    if (recurSearch(copy.childrens[i], word, index + 1));
+                    if (recurSearch(copy.childrens[i], word, index + 1))
                         return true;
-                } else if ((copy.childrens[i] != null) &&(word.length() - index == 1)) return true;
+                }
             }
             return false;
-        } else {
+        }
+        else {
             int pos = ch - 'a';
             if ((!copy.isStop) && (copy.childrens[pos] != null)) {
                 copy = copy.childrens[pos];
                 return recurSearch(copy, word, index + 1);
             } else {
-                if ((copy.childrens[pos] != null) && (word.length() - index == 1)) return true;
-                else return false;
+                return false;
             }
         }
     }
 
 
+
     public static void main(String[] args) {
         WordDictionary dict = new WordDictionary();
-        dict.addWord("a");
-        dict.addWord("ab");
+        dict.addWord("at");
+        dict.addWord("and");
+        dict.addWord("an");
+        dict.addWord("add");
 
         System.out.println(dict.search("a"));
-        System.out.println(dict.search("a."));
-        /*
-        System.out.println(dict.search("ab"));
-        System.out.println(dict.search(".a"));
-        System.out.println(dict.search(".b"));
-        System.out.println(dict.search("ab."));
-        System.out.println(dict.search("ba."));
+        System.out.println(dict.search(".at"));
+        dict.addWord("bat");
+
+        System.out.println(dict.search(".at"));
+        System.out.println(dict.search("an."));
+        System.out.println(dict.search("a.d."));
+        System.out.println(dict.search("b."));
+        System.out.println(dict.search("a.d"));
         System.out.println(dict.search("."));
-        System.out.println(dict.search(".."));
-        */
+
     }
 }
