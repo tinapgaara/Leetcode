@@ -12,7 +12,7 @@ import java.util.Stack;
 * */
 public class Calculator {
 
-    // Solution 1: no extra space
+    // Solution 1: no extra space: complicated !!!!
     public int calculate(String expression) {
         char[] chs = expression.toCharArray();
         Stack<String> stack = new Stack<String>();
