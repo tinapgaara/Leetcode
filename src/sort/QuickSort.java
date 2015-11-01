@@ -9,6 +9,9 @@ import java.util.List;
 public class QuickSort {
 
     /*
+    * O(nlogn) comparisons
+    * */
+    /*
     * QuickSort(int[] num, int low, int high) {
     *   if (low < high) {
     *       int mid = Partition(num, low, high);

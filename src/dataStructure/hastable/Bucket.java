@@ -1,6 +1,4 @@
-package hastable;
-
-import java.util.ArrayList;
+package dataStructure.hastable;
 
 public class Bucket {
 	

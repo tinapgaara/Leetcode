@@ -1,4 +1,4 @@
-package hastable;
+package dataStructure.hastable;
 
 public class OpenAddressHashTable{
 	

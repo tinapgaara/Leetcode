@@ -17,6 +17,7 @@ public class ReverseInteger {
             isNeg = true;
             x = x * -1;
         }
+        // Important !!!!  res must use Long
         long res = 0;
         // Important !!!! Once the > 32bits, can not use > Integer.MAX_VALUE to judge, the sign has been changed, and
         // value is randomly.

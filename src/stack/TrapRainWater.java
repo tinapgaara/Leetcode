@@ -91,8 +91,8 @@ public class TrapRainWater {
 
     public static void main(String[] args) {
         TrapRainWater ob = new TrapRainWater();
-        int[] height = new int[]{6,8,5,0,0,6,5};
-        ob.trap_2(height);
+        int[] height = new int[]{3,0,0,0,2,0,3,0,2};
+        ob.trap(height);
     }
 
 }

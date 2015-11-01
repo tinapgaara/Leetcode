@@ -1,5 +1,7 @@
-package hastable;
-import java.util.*;
+package dataStructure.hastable;
+
+import java.util.ArrayList;
+
 public class Slot {
 
 	private ArrayList<Integer> m_list ;
