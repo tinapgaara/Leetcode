@@ -1,6 +1,4 @@
-package google;
-
-import sun.rmi.runtime.Log;
+package google.hashMap;
 
 import java.util.*;
 
@@ -8,7 +6,7 @@ import java.util.*;
  * Created by yingtan on 11/1/15.
  */
 public class FindWinner {
-    public class LogEntry {
+    public static class LogEntry {
         String candidate;
         int time;
 
@@ -99,6 +97,43 @@ public class FindWinner {
         return heapSort(candidates, k);
     }
 
+    // Solution 3: use bubble sort:
+    public String[] findKWinners_bubble(List<LogEntry> entries, int time, int k) {
+        HashMap<String, Integer> counts = new HashMap<>();
+        for (LogEntry entry : entries) {
+            if (entry.time <= time) {
+                if (counts.containsKey(entry.candidate)) {
+                    int count = counts.get(entry.candidate);
+                    counts.put(entry.candidate, count + 1);
+                } else {
+                    counts.put(entry.candidate, 1);
+                }
+            }
+        }
+
+        LogEntry[] candidates = new LogEntry[counts.size()];
+        int m = 0;
+        for (Map.Entry<String,Integer> entry : counts.entrySet()) {
+            LogEntry logEntry = new LogEntry(entry.getKey(), entry.getValue());
+            candidates[m] = logEntry;
+            m ++;
+        }
+
+        String[] res = new String[k];
+
+        for (int i = 0 ; i < k ; i ++) {
+            for (int j = i + 1; j < counts.size(); j ++) {
+                if (candidates[i].time < candidates[j].time) {
+                    LogEntry tmp = candidates[i];
+                    candidates[i] = candidates[j];
+                    candidates[j] = tmp;
+                }
+            }
+            res[i] = candidates[i].candidate;
+        }
+        return res;
+    }
+
     public LogEntry[] buildHeap(LogEntry[] candidates) {
         int heapSize = candidates.length;
         for (int i = heapSize/2; i >= 0 ; i --) {
@@ -131,11 +166,11 @@ public class FindWinner {
 
         int max = candidates[i].time;
         int maxIndex = i;
-        if ((i < heapSize) && (candidates[left].time > candidates[i].time)) {
+        if ((left < heapSize) && (candidates[left].time > candidates[i].time)) {
             maxIndex = left;
             max = candidates[left].time;
         }
-        if ((i < heapSize) && (candidates[right].time > max)) {
+        if ((right < heapSize) && (candidates[right].time > max)) {
             maxIndex = right;
             max = candidates[right].time;
         }
@@ -167,6 +202,24 @@ public class FindWinner {
             }
             return 0;
         }
+    }
+
+    public static void main(String[] args) {
+        LogEntry e1 = new LogEntry("hello", 1);
+        LogEntry e2 = new LogEntry("hello", 2);
+        LogEntry e3 = new LogEntry("hello", 3);
+
+        LogEntry e4 = new LogEntry("why", 3);
+
+        List<LogEntry> input = new ArrayList<>();
+        input.add(e1);
+        input.add(e2);
+        input.add(e3);
+        input.add(e4);
+
+        FindWinner ob = new FindWinner();
+        String[] res = ob.findKWinners_bubble(input, 3, 2);
+        System.out.println(ob.findWinnder(input, 3));
     }
 
 }
