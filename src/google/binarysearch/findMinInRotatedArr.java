@@ -32,6 +32,7 @@ public class findMinInRotatedArr {
         }
         int med = (low + high) / 2;
 
+
         if ((med < nums.length -1) && (med > 0)) { // for [4 0 5]: med value
             if ((nums[med] < nums[med - 1]) && (nums[med] < nums[med + 1]))
                 return nums[med];
@@ -50,16 +51,15 @@ public class findMinInRotatedArr {
         }
         return 0;
     }
-
-/*
+/*  *
+    * Find Minimum in Rotated Sorted Array II
     *
-            * Find Minimum in Rotated Sorted Array II
-    *
-            * Follow up for "Find Minimum in Rotated Sorted Array":
-    What if duplicates are allowed?
+    * Follow up for "Find Minimum in Rotated Sorted Array":
 
-    Would this affect the run-time complexity? How and why?
-            * */
+        What if duplicates are allowed?
+
+        Would this affect the run-time complexity? How and why?
+    * */
 
     public int findMinDup(int[] nums) {
         if ((nums == null) || (nums.length == 0))
@@ -82,7 +82,7 @@ public class findMinInRotatedArr {
 
     public static void main(String[] args) {
         findMinInRotatedArr ob = new findMinInRotatedArr();
-        int[] nums= new int[]{3,1,1};
+        int[] nums= new int[]{4,1,3};
         System.out.println(ob.findMinDup(nums));
     }
 
