@@ -21,6 +21,14 @@ public class RandomGenerator {
 	// ]
 	// cal Math.random :1/12  ; drop in [0,1/8], return 0.
 
+	//⼀一个数组
+	//1,4,2,6.....
+	/*
+	*先找cumulative probability［1, 5, 7, 13]， 然后弄个0〜～13
+	之间的random数字⽐比较过去找它的位置就好 (binary
+	search)
+	* */
+
 	public int generateRandomNumber(int[] numbers, double[] probs) {
 		for (int i = 1 ; i < probs.length; i ++) {
 			probs[i] = probs[i-1] + probs[i];

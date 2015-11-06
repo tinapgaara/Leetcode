@@ -52,4 +52,13 @@ public class WordAbbreviation {
            *
            * */
     }
+
+    /*
+    * 可以为 a1breviation a2reviation 1bbreviation
+    abbrevia4 ab3via4 abbreviation 11n 12等，问（1）⼀一共有多少
+    种缩写（2）输出所有这些缩写
+    * */
+    public void printAllAbbrievations(String word) {
+
+    }
 }
