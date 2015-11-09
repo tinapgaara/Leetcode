@@ -1,0 +1,76 @@
+package google.string;
+
+import java.util.HashMap;
+
+/**
+ * Created by yingtan on 11/7/15.
+ */
+public class MinWindowSubstring {
+
+    public String minWindow(String s, String t) {
+        if ( (s == null) || (s.length() == 0) || (t == null) || (t.length() == 0) )
+            return "";
+
+        int minLen = Integer.MAX_VALUE;
+        if (s.length() == 1) {
+            if (t.length() < 1) {
+                return s;
+            } else if (t.length() == 1) {
+                if (s.equals(t)) return s;
+            }
+            return "";
+        }
+        int start = 0;
+        int end = 0;// Important !!!
+        int[] tCounts = new int[256];
+        for (int i = 0 ; i < t.length(); i ++) {
+            tCounts[t.charAt(i) - '0'] ++;
+        }
+        int[] sCounts = new int[256];
+        int tLen = t.length();
+        int coverCh = 0;
+
+        int low = -1;
+        int high = -1;
+
+        while (end < s.length() && (start < s.length())) {
+            sCounts[s.charAt(end) - '0'] ++;
+            if (sCounts[s.charAt(end) - '0'] <= tCounts[s.charAt(end) - '0']) // Important !!!! must be <=. for "aa", "aa"
+                coverCh ++;
+            if (coverCh == tLen) {
+                //
+                while ( (start < s.length()) && ((!t.contains(s.charAt(start) + "")) ||
+                        (sCounts[s.charAt(start) - '0'] > tCounts[s.charAt(start) - '0']))) { // because, boundary case: "aa" "aa"
+                    sCounts[s.charAt(start) - '0'] --; // Important !!!! first abstract the sCounts, then start ++
+
+                    start ++;
+                    // System.out.println("move right:"+ start+ "'s char:"+ s.charAt(start) + " start's count:" + sCounts[s.charAt(start) - '0']);
+                    System.out.println(s.charAt(start) + ", "+ s.charAt(end)+ " "+sCounts[s.charAt(start) - '0'] +"; " + tCounts[s.charAt(start) - '0']);
+                }
+                int curLen = end - start + 1;
+                System.out.println(s.substring(start, start+curLen));
+                if (curLen < minLen) {
+                    minLen = curLen;
+                    low = start;
+                    high = end;
+                }
+                /*
+                if (start >= 0)
+                    System.out.println("cur pos:"+ start+ "'s char:"+ s.charAt(start) +"....." + s.charAt(end)+ coverCh);
+                    */
+                sCounts[s.charAt(start) - '0'] --;
+                coverCh --;
+                start ++;
+            }
+            end ++;
+        }
+        if ((low < 0) && (high < 0)) return "";
+        else
+            return s.substring(low, high+1);
+    }
+
+    public static void main(String[] args) {
+        MinWindowSubstring ob = new MinWindowSubstring();
+        System.out.println(ob.minWindow("ADOBECODEBANC", "ABC"));
+    }
+}

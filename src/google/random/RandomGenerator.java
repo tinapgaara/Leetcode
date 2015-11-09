@@ -169,9 +169,54 @@ public class RandomGenerator {
 			res[i] = A[i];
 		}
 		return res;
-		
-			
 	}
+
+/*
+	Given a infinite stream of number, return k random elements
+	with equal probability.
+
+	*/
+	int curNumber = 0;
+	public int[] getRandomKEqualProbability(int[] stream, int k) {
+		for (int i = 0; i < stream.length; i ++) {
+			curNumber ++;
+		}
+		int[] arr = new int[k];
+		for (int i = 0 ; i < k ; i ++) {
+			arr[i] = stream[i];
+		}
+		Random rd = new Random();
+		for (int i = k ; i < curNumber; i ++) {
+			int rand = rd.nextInt(i);// calculate random number bewteen [0, k]
+			if (rand < k) {
+				arr[rand] = stream[i];
+			}
+		}
+		return arr;
+	}
+
+	/*
+	Given a infinite stream of number, return a random element
+	with equal probability.
+
+	*/
+	public int getRandomNumberEqualProbability(int[] stream) {
+		for (int i = 0 ; i < stream.length ; i ++) {
+			curNumber ++;
+		}
+
+		int randNum = stream[0];
+		Random rd = new Random();
+		for (int i = 1; i < curNumber; i ++) {
+			int randIndex = rd.nextInt(i);
+
+			if (randIndex < 1) {
+				randNum = stream[i];
+			}
+		}
+		return randNum;
+	}
+
 	
 	public static void main(String[] args)
 	{
