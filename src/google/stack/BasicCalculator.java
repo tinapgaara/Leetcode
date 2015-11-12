@@ -1,5 +1,7 @@
 package google.stack;
 
+import java.util.Stack;
+
 /**
  * Created by max2 on 11/10/15.
  */
@@ -23,8 +25,76 @@ public class BasicCalculator {
         if ((s == null) || (s.length() == 0)) return 0;
         s = s.trim();
 
+        Stack<String> stack = new Stack<String>();
+        String num = "";
+        for (int i = 0 ; i < s.length() ; i ++) {
+            char ch = s.charAt(i);
+            if ((ch == '+') || (ch == '-')) {
+                if (num.length() > 0) {
+                    int nNum = Integer.parseInt(num);
+                    num = "";
+                    stack.push(nNum + "");
+                }
+                stack.push(ch+"");
+
+            }
+            else if (ch == '(') {
+                stack.push(ch + "");
+            }
+            else if (ch == ')') {
+                if (num.length() > 0) {
+                    int nNum = Integer.parseInt(num);
+                    num = "";
+                    stack.push(nNum + "");
+                }
+                // pop
+                int sum = calculateSum(stack);
+                stack.push(sum+"");
+            }
+            else if ((ch >= 48) && (ch <= 57)){
+                num = num + ch;
+            }
+        }
+        if (num.length() > 0) {
+            stack.push(num);
+        }
+        if (!stack.isEmpty()) {
+            int sum = calculateSum(stack);
+            return sum;
+        }
 
         return 0;
 
     }
+
+    //(1+(4+5+2
+    public int calculateSum(Stack<String> stack) {
+        // ( 2- 1+ 1   or  2+1+1
+        if (stack.isEmpty()) return 0;
+
+        else if (stack.size() == 1) {
+            return Integer.parseInt(stack.pop()); // may exception
+        }
+        else if (stack.size() > 1) {
+            int num2 = Integer.parseInt(stack.pop()); // may exception
+            String op = stack.pop();
+            if (op.equals("-")) {
+                return calculateSum(stack) - num2;
+            }
+            else if (op.equals("+")){ // +  or (
+                return calculateSum(stack) + num2;
+            }
+            else if (op.equals("(")) { // Important !!!
+                return num2;
+            }
+        }
+        System.out.println("Not Valid operation Input !");
+        return 0;
+    }
+
+    public static void main(String[] args) {
+        BasicCalculator ob = new BasicCalculator();
+        System.out.println(ob.calculate("(1+(4+5+2-4)+12-3)+(6+8)"));
+    }
+
 }
