@@ -18,7 +18,9 @@ public class BestTimeBuySellStockKTimes {
 
         if ((prices == null) || (prices.length == 0)) return 0;
         int len = prices.length;
+        // sometimes, k is much larger than len, should not use two-dimension array
         int[][] local = new int[len][k+1]; // pay attention : k+1
+
         int[][] global = new int[len][k+1];
 
         // initialize: all 0
@@ -40,5 +42,10 @@ public class BestTimeBuySellStockKTimes {
             }
         }
         return global[len-1][k];
+    }
+
+    public int maxProfits2(int k, int[] prices) {
+        // TODO:
+        return 0;
     }
 }
