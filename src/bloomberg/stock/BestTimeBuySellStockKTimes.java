@@ -18,14 +18,17 @@ public class BestTimeBuySellStockKTimes {
 
         if ((prices == null) || (prices.length == 0)) return 0;
         int len = prices.length;
-        // sometimes, k is much larger than len, should not use two-dimension array
-        int[][] local = new int[len][k+1]; // pay attention : k+1
 
+        if (k >= len) {
+            return maxProfits2(prices);
+        }
+
+        int[][] local = new int[len][k+1]; // pay attention : k+1
         int[][] global = new int[len][k+1];
 
         // initialize: all 0
         // lcoal[i][j] = local[i-1][j] + diff(p[i] - p[i-1]) : p[i] > p[i-1]
-        // local[i][j] = global[i-1][j] : p[i] < p[i-1]
+        // local[i][j] = global[i-1][j-1] : p[i] < p[i-1]
 
         // so , local[i][j] = max(local[i-1][j] + diff, global[i-1][j])
 
@@ -35,17 +38,28 @@ public class BestTimeBuySellStockKTimes {
         // so , global[i][j] = max(global[i-1][j], local[i][j]);
 
         for (int i = 1 ; i < prices.length ; i ++) {
-           int diff = prices[i] - prices[i-1];
+            int diff = prices[i] - prices[i-1];
             for (int j =1; j <= k ; j ++) {
-                local[i][j] = Math.max(local[i - 1][j] + diff, global[i - 1][j]);
+                local[i][j] = Math.max(local[i - 1][j] + diff, global[i - 1][j-1]);
                 global[i][j] = Math.max(global[i - 1][j], local[i][j]);
             }
         }
         return global[len-1][k];
+
     }
 
-    public int maxProfits2(int k, int[] prices) {
-        // TODO:
-        return 0;
+    public int maxProfits2(int[] prices) {
+        int[] delta = new int[prices.length - 1];
+
+        for (int i = 1; i < prices.length; i ++) {
+            delta[i-1] = prices[i] - prices[i-1];
+        }
+        int sum = 0;
+        for (int i = 0 ; i < delta.length; i ++) {
+            if (delta[i] > 0) {
+                sum = sum + delta[i];
+            }
+        }
+        return sum;
     }
 }

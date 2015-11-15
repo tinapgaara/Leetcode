@@ -1,4 +1,4 @@
-package bloomberg.deck;
+package bloomberg.design.deck;
 
 import java.util.Random;
 

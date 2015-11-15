@@ -1,4 +1,4 @@
-package bloomberg.deck;
+package bloomberg.design.deck;
 
 /**
  * Created by yingtan on 10/26/15.

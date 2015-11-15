@@ -18,7 +18,8 @@ Examples:
 public class RemoveInvalidParentheses {
 
     public List<String> removeInvalidParentheses(String s) {
-
+        // tODO:
+        return null;
     }
 
 }
