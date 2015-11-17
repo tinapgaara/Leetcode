@@ -21,7 +21,7 @@ word = "ABCCED", -> returns true,
 word = "SEE", -> returns true,
 word = "ABCB", -> returns false.
 * */
-public class wordSearchI {
+public class WordSearchI {
 
     public boolean exist(char[][] board, String word) {
         if (board == null) return false;

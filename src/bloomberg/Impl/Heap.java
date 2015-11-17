@@ -17,7 +17,7 @@ public class Heap {
         buildHeap();
     }
 
-    public int extractMax() { //o(1)
+    public int extractMax() { //o(logn)
         int res = nums[0];
         heapSize --;
 
@@ -95,7 +95,7 @@ public class Heap {
     }
 
     public int parent(int index) {
-        return (index)/ 2;
+        return (index-1)/ 2;
     }
 
 

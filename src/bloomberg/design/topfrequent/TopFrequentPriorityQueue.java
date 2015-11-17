@@ -8,21 +8,23 @@ import java.util.*;
 /*
 *美国人打开chrome，说主页上会显示最长访问的8个网址，你如何实现这个功能。. 1point3acres.com/bbs
 解法：max heap + hashmap
+
+// however, can not ensure that only store 8 urls
 * */
-public class TopFrequent {
+public class TopFrequentPriorityQueue {
 
     // times to visit some url
     private Map<String, Integer> visitTimes;
     private PriorityQueue<String> queue;
 
-    public TopFrequent() {
+    public TopFrequentPriorityQueue() {
 
         visitTimes = new HashMap<>();
         UrlComparator comparator = new UrlComparator();
         queue = new PriorityQueue<>(comparator);
     }
 
-    public void clickUrl(String url) {
+    public void clickUrl(String url) { // o(n)
         if (visitTimes.containsKey(url)) {
             int count = visitTimes.get(url);
             visitTimes.put(url, count + 1);
@@ -31,11 +33,13 @@ public class TopFrequent {
             visitTimes.put(url, 1);
         }
 
-        queue.remove(url);
+        if (queue.contains(url)) // o(n)
+            queue.remove(url);// o(n)
+
         queue.offer(url);
     }
 
-    public List<String> extractTopKFrequentUrls(int k) {
+    public List<String> extractTopKFrequentUrls(int k) { // k * log(n)
         List<String> res = new ArrayList<>();
         for(int i = 0 ; i < k ; i ++) {
             res.add(queue.poll());
@@ -60,7 +64,7 @@ public class TopFrequent {
     }
 
     public static void main(String[] args) {
-        TopFrequent ob = new TopFrequent();
+        TopFrequentPriorityQueue ob = new TopFrequentPriorityQueue();
         ob.clickUrl("h");
         ob.clickUrl("h");
         ob.clickUrl("e");
