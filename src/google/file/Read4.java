@@ -5,37 +5,51 @@ package google.file;
  */
 public class Read4 {
     public String buffer = "";
+
     public int read(char[] buf, int n) {
+        // keep track of result len
         int res = 0;
-        int exisitedLen = buffer.length();
-        int readBufLen = Math.min(exisitedLen, n);
 
-        for (int i = 0 ; i < readBufLen; i ++) {
-            buf[i] = buffer.charAt(i);
+        // firstly read from buffer
+        int readBufferLen = Math.min(buffer.length(), n);
+        for (int i = res; i < res + readBufferLen; i ++) {
+            buf[i] = buffer.charAt(i);// store buffer to result[]
         }
-        buffer = buffer.substring(readBufLen, buffer.length());// report index outof bound ?
-        res = res + readBufLen;
+        buffer = buffer.substring(readBufferLen); // keep rest of buffer in memory
+        res = res + readBufferLen; // attach new read len to res
 
-        int newReadLen = n - readBufLen;
-        int read4LenOnce = 0;
-        int readActualLenOnce = 0;
-        char[] tmp = new char[4];
-        while (newReadLen > 0) {
-            read4LenOnce = read4(tmp);
-            if (read4LenOnce == 0) break;
-            readActualLenOnce = Math.min(read4LenOnce, newReadLen);
+        // secondly read from read4
+        int leftReadLen = n - readBufferLen;// how many left chars we need to read
+        char[] read4OnceBuf = new char[4];
+        int read4OnceLen = 0; // call read4 once, the result it returns
 
-            for (int i = res; i <= res - 1 + readActualLenOnce; i ++) {
-                buf[i] = tmp[i - res];
+        /*
+        * Because sometimes: leftReadLen  < read4OnceLen, so we do not need 4 chars, just need 3.
+        * In this case, we want o keep actual len to use which is 3.
+        * So we have:
+        *  actualRead4OnceLen = Math.min(leftReadLen, read4OnceLen);
+        *
+        *  Rest of the chars in read4OnceLen, we store it in buffer.
+        * */
+        int actualRead4OnceLen = 0;
+        while (leftReadLen > 0) {
+            read4OnceLen = read4(read4OnceBuf);
+            // Very important here !!!!
+            if (read4OnceLen == 0) break;
+            actualRead4OnceLen = Math.min(leftReadLen, read4OnceLen);
+            // append new read len to result char array
+            for (int i = res; i < res + actualRead4OnceLen; i ++) {
+                buf[i] = read4OnceBuf[i-res];
             }
-            res = res + readActualLenOnce;
-            newReadLen = newReadLen - readActualLenOnce;
+            // attach new read len to res
+            res = res + actualRead4OnceLen;
+            // recalculate rest of chars we need to read
+            leftReadLen = leftReadLen - actualRead4OnceLen;
         }
-        int storeBufLen = read4LenOnce - readActualLenOnce; // >0
-        if (storeBufLen > 0) {
-            for (int i = 0 ; i < storeBufLen; i ++) {
-                buffer = buffer + tmp[readActualLenOnce+ i];
-            }
+
+        int storeBufLen = read4OnceLen - actualRead4OnceLen;
+        for (int i = 0 ; i < storeBufLen; i ++) {
+            buffer = buffer + read4OnceBuf[actualRead4OnceLen+i];
         }
         return res;
     }

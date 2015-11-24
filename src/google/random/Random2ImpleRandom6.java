@@ -26,11 +26,21 @@ public class Random2ImpleRandom6 {
             if (sum <= 5) return sum;
         }
         */
-
         while(true) {
             sum = 4 * random.nextInt(2) + 2 * random.nextInt(2) + random.nextInt(2);
             if (sum <= 5) break;
         }
         return 0;
+    }
+
+    // rand 25 = 5 * (rand5() -1)  + rand5();
+    public int generateRandom25UsingRandom5() {
+        Random random = new Random();
+
+        int x = 0;
+        while (x > 7) {
+            x = 5 * (random.nextInt(5) -1) + random.nextInt(5);
+        }
+        return x;
     }
 }

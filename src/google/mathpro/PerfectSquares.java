@@ -24,7 +24,7 @@ public class PerfectSquares {
             minNum[i] = n;
             for (int j = 1; j * j <= i; j ++) {
                 int prevValue = j * j;
-                minNum[i] = Math.min(minNum[i], minNum[prevValue] + minNum[i - prevValue]);
+                minNum[i] = Math.min(minNum[i], 1 + minNum[i - prevValue]);
             }
         }
         return minNum[n];
