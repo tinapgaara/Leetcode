@@ -1,5 +1,8 @@
 package google.array;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by yingtan on 11/2/15.
  */
@@ -42,118 +45,87 @@ public class ConseqSubSeqSum {
     }
 
     // find min length of array whose total value == sum
+    // all positive numbers
     public static int minSubSequenceLen(int[] nums, int sum) {
-        int head = 0;
-        int tail  = 1;
+        if ((nums == null) || (nums.length == 0)) return 0;
 
-        if ( (nums == null) || (nums.length == 0) ) return 0;
-        if (nums.length == 1) {
-            if (sum == nums[0]) return 1;
-            else return 0;
-        }
-
-        int tmpSum = nums[head];
+        int low = 0;
         int minLen = Integer.MAX_VALUE;
-        if (tmpSum >= sum) minLen = 1;
-
-        int len = 1;
-        while ((tail < nums.length) && (head <= tail)) { // important !!! head < tail
-            tmpSum = tmpSum + nums[tail];
-            len ++;
+        int tmpSum = 0;
+        int high = 0;
+        while ((low <= high) && (high < nums.length)) {
+            tmpSum  = tmpSum + nums[high];
             if (tmpSum == sum) {
-                minLen = Math.min(minLen, len);
-                tmpSum = tmpSum - nums[head];
-                head ++;
-                tail ++;
-                len --;
+                minLen = Math.min(minLen, high - low + 1);
+                tmpSum = tmpSum - nums[low];
+                low ++;
+                high ++;
             }
             else if (tmpSum < sum) {
-                tail ++;
+                high ++;
             }
             else {
-                tmpSum = tmpSum - nums[head] - nums[tail]; // important need to subtract num[tail], because
-                minLen = Math.min(minLen, len);
-                // need to add num[tail] again
-                len = len - 2;
-                head ++;
+                tmpSum = tmpSum - nums[low] - nums[high];
+                low ++;
             }
-        }
-        if (minLen == Integer.MAX_VALUE) {
-            minLen = 0;
         }
         return minLen;
     }
 
-    // find min length of array whose total value >= sum
-    public int minSubArrayLen(int s, int[] nums) {
-        int head = 0;
-        int tail  = 1;
-        if ( (nums == null) || (nums.length == 0) ) return 0;
-        if (nums.length == 1) {
-            if (s == nums[0]) return 1;
-            else return 0;
-        }
+    // Condition 2: has negative numbers
+    // Solution 1: o(n) use hashMap
+    public static boolean checkSubSequenceHasNegative(int[] nums, int target) {
+        Map<Integer, Integer> indexsOfPreviousSum = new HashMap<>();
 
-        int tmpSum = nums[head];
-        int minLen = Integer.MAX_VALUE;
-        if (tmpSum >= s) minLen = 1;
-        int len = 1;
-        while ((tail < nums.length) && (head <= tail)) { // important !!! head < tail
-            tmpSum = tmpSum + nums[tail];
-            len ++;
-            if (tmpSum == s) {
-                minLen = Math.min(minLen, len);
-                tmpSum = tmpSum - nums[head];
-                head ++;
-                tail ++;
-                len --;
-            }
-            else if (tmpSum < s) {
-                tail ++;
+        int curSum = 0;
+        for (int i = 0 ; i < nums.length ; i ++) {
+            curSum = curSum + nums[i];
+            if (indexsOfPreviousSum.containsKey(curSum - target)) {
+                return true;
             }
             else {
-                tmpSum = tmpSum - nums[head] - nums[tail];
-                // important need to subtract num[tail], because need to add num[tail] again
-                minLen = Math.min(minLen, len);
-                len = len - 2;
-                head ++;
-            }
-        }
-        if (minLen == Integer.MAX_VALUE) {
-            minLen = 0;
-        }
-        return minLen;
-    }
-
-    // Condition 2: has negative numbers in num array  ?????
-    public static boolean checkSubSequenceHasNegative(int[] num, int sum) {
-        int head = 0;
-        int tail  = 1;
-
-        if (num.length == 1) {
-            return sum == num[0];
-        }
-
-        int tmpSum = num[head];
-        if (tmpSum == sum) return true;
-        while ((tail < num.length) && (head < tail)) { // important !!! head < tail
-            tmpSum = tmpSum + num[tail];
-            if (tmpSum == sum) return true;
-            else if (tmpSum < sum) {
-                tail ++;
-            }
-            else {
-                tmpSum = tmpSum - num[head] - num[tail]; // important need to subtract num[tail], because
-                // need to add num[tail] again
-                head ++;
+                indexsOfPreviousSum.put(curSum, i);
             }
         }
         return false;
     }
 
+    // Solution 1: o(n) use hashMap: map consecutive sum from 0- index  - >  index
+    public int minSubSequenceLenHasNeg(int[] nums, int target) {
+        HashMap<Integer, Integer> indexs = new HashMap<Integer, Integer>();
+        int sum = 0;
+        for (int i = 0 ; i < nums.length; i ++) {
+            sum = sum + nums[i];
+            indexs.put(sum, i);
+        }
+
+        int minLen = Integer.MAX_VALUE;
+        if (indexs.containsKey(target)) {
+            minLen = indexs.get(target) + 1;
+        }
+        for (Map.Entry<Integer, Integer> entry: indexs.entrySet()) {
+            int x = entry.getKey();
+            int start = entry.getValue();
+            int y = x + target;
+            if (indexs.containsKey(y)) {
+                int end = indexs.get(y);
+                if (end - start > 0) {
+                    minLen = Math.min(minLen, end-start);
+                }
+            }
+        }
+        return minLen;
+    }
+
+
+    // Solution 2: use DP
+    // TODO: how to do this in DP ?
+
 
     public static void main(String[] args) {
-        int[] num = new int[]{10,2,3};
-        System.out.println(minSubSequenceLen(num, 6));
+        ConseqSubSeqSum ob = new ConseqSubSeqSum();
+        int[] num = new int[]{2,3,4,5,6,7,8};
+        int[] negs = new int[]{4,5,-6,1,-2,3,7};
+        System.out.println(ob.minSubSequenceLenHasNeg(negs, 9));
     }
 }

@@ -15,25 +15,28 @@ Compute and return the square root of x.
 public class SqrtX {
 
     public int mySqrt(int x) {
-        return (int)recurMySqrt(x, 1, x, 0);
+        if (x < 0) return -1;
+        if (x == 0) return 0;
+
+        return (int)recurMySqrt(x, 0, x);
     }
 
-    public long recurMySqrt(int target, long low, long high, long prevMed) {
-        if (low > high) return prevMed;
+    public long recurMySqrt(int target, long low, long high) {
+        if (low > high) return high;
 
         long med = (low + high) / 2;
         if (med * med == target) {
             return med;
         }
         else if (med * med < target) {
-            prevMed = med;
-            return recurMySqrt(target, med+1, high, prevMed);
+            //prevMed = med;
+            return recurMySqrt(target, med+1, high);
         }
         else {
-            return recurMySqrt(target, low, med-1,prevMed);
+            // prevMed = med;
+            return recurMySqrt(target, low, med-1);
         }
     }
-
 
     public float floatSqrt(float x, int precision) {
         return recurFloatSqrt(x, 1, x, precision, 0);

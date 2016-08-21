@@ -22,7 +22,38 @@ public class CompleteBinaryTree {
     }
 
     public int countCompleteTreeNodes(TreeNode root) {
-        return 0;
-        // TODO
-    }
+            return recurCount(root);
+        }
+
+        public int recurCount(TreeNode root) {
+            if (root == null) return 0;
+            int leftDepth = countLeftDepth(root);
+            int rightDepth = countRightDepth(root);
+            if (leftDepth == rightDepth) {
+                return ((1 << leftDepth) - 1);
+            }
+            else {
+                return recurCount(root.left) + 1 + recurCount(root.right);
+            }
+        }
+
+        public int countLeftDepth(TreeNode root) {
+            int depth = 0;
+            TreeNode cur = root;
+            while (cur != null) {
+                depth ++;
+                cur = cur.left;
+            }
+            return depth;
+        }
+
+        public int countRightDepth(TreeNode root) {
+            int depth = 0;
+            TreeNode cur = root;
+            while (cur != null) {
+                depth ++;
+                cur = cur.right;
+            }
+            return depth;
+        }
 }

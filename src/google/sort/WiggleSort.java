@@ -7,6 +7,18 @@ import java.util.Arrays;
  */
 public class WiggleSort {
 
+    public void wiggleSort_2(int[] nums) {
+        int flag = 1;
+        for (int i = 1; i < nums.length ; i ++) {
+            if (flag * nums[i] < flag * nums[i-1]) {
+                int tmp = nums[i];
+                nums[i] = nums[i-1];
+                nums[i-1] = tmp;
+            }
+            flag = flag * -1;
+        }
+    }
+
     public void wiggleSort(int[] nums) {
         if ((nums == null) || (nums.length <= 1))
             return;

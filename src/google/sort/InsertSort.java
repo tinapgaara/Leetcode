@@ -5,7 +5,23 @@ package google.sort;
  */
 public class InsertSort {
 
-    public int[] insertSort(int[] nums) {
+    public void insertSort(int[] nums) {
+        for (int i = 1; i < nums.length; i ++) {
+            int compareNumIndex = i;
+            for (int j = i-1; j>= 0; j --) {
+                if (nums[j] > nums[compareNumIndex]) {
+                    int tmp = nums[j];
+                    nums[j] = nums[compareNumIndex];
+                    nums[compareNumIndex] = tmp;
+
+                    compareNumIndex = j;
+                }
+                else break;
+            }
+        }
+    }
+
+    public int[] insertSort_2(int[] nums) {
         int[] res = new int[nums.length];
 
         res[0] = nums[0];
@@ -41,7 +57,7 @@ public class InsertSort {
     public static void main(String[] args) {
         InsertSort ob = new InsertSort();
         int[] nums = new int[]{100,0,4,2,8,19,7,4,2,0,9,7};
-        nums = ob.insertSort(nums);
+        ob.insertSort(nums);
         System.out.println("");
 
     }

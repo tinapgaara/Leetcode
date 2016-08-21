@@ -36,8 +36,6 @@ public class WordLadderII {
             Node cur = queue.poll();
             String word = cur.mNodeStr; // hit
             int dist = cur.mDist;
-            int color = cur.mColor;
-
             if (dist != prevLevel) {
                 wordList.removeAll(curLevelVisited);
                 prevLevel = dist;

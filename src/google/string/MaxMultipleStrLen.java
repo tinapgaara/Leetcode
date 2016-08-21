@@ -15,6 +15,33 @@ import java.util.Comparator;
 * */
 public class MaxMultipleStrLen {
 
+
+    // can we do it better < o(n^2) ??
+    // using bit:    ["abcw"] : store it in element[i]:[1,1,1,....0] = int = 111...0
+
+    public int maxProduct(String[] words) {
+        if ((words == null) || (words.length == 0)) return 0;
+
+        int[] elements = new int[words.length];
+        for (int i = 0 ; i < words.length; i ++) {
+            String word = words[i];
+            for (int j = 0 ; j < word.length(); j ++) {
+                elements[i] = elements[i] | (1 << (word.charAt(j) - 'a'));
+            }
+        }
+        int maxLen = 0;
+        for (int i = 0 ; i < words.length; i ++) {
+            for (int j = i+1; j < words.length; j ++) {
+                if ((elements[i] & elements[j]) == 0) { // has dup
+                    if (words[i].length() * words[j].length() > maxLen) {
+                        maxLen = words[i].length() * words[j].length();
+                    }
+                }
+            }
+        }
+        return maxLen;
+    }
+
     // Solution 1: each string -> char[26]
     // for each string, scan rest of string to calculte multiple rest
     // finally, find max one
@@ -76,5 +103,4 @@ public class MaxMultipleStrLen {
         }
     }
 
-    // can we do it better < o(n^2) ??
 }

@@ -7,7 +7,6 @@ import java.util.*;
  */
 public class CourseScheduleII {
 
-    // Example for DFS to record color, time
     public static int time = 0;
     public class Graph {
         Map<Integer, List<Node>> map;
@@ -69,7 +68,7 @@ public class CourseScheduleII {
         cur.startTime = time;
         visitedFlags[cur.nodeNo] = 1;
         List<Node> neighbors = map.get(cur.nodeNo);
-        System.out.println(cur.nodeNo);
+       //  System.out.println(cur.nodeNo);
         if ((neighbors != null) && (neighbors.size() > 0) ){
             for (Node neighbor: neighbors) {
                 if (visitedFlags[neighbor.nodeNo] == 0) {
@@ -84,7 +83,7 @@ public class CourseScheduleII {
         visitedFlags[cur.nodeNo] = 2;
         time ++;
         cur.finishTime = time;
-        System.out.println(cur.nodeNo + "," + time);
+        // System.out.println(cur.nodeNo + "," + time);
         order.add(0, cur.nodeNo);
         return true;
     }
@@ -145,8 +144,8 @@ public class CourseScheduleII {
 
     public static void main(String[] args) {
         CourseScheduleII ob = new CourseScheduleII();
-        int[][] p = new int[][]{{0,1}};
-        int[] a = ob.findOrder(2, p);
+        int[][] p = new int[][]{{3,0},{0,1}};
+        int[] a = ob.findOrder(4, p);
         for (int i = 0 ; i < a.length; i ++)
             System.out.println(a[i]);
     }

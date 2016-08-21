@@ -19,33 +19,32 @@ public class LongestSubstrAtMost2DiffChars {
     public int lengthOfLongestSubstringTwoDistinct(String s) {
         if (s.length() <= 2) return s.length();
 
+        return lengthOfLongestSubstringKDistinct(s, 2);
+    }
+
+    public int lengthOfLongestSubstringKDistinct(String s, int k) {
+
+        int[] count = new int[256];
         int low = 0;
-        int high = 1;
-        int maxLen = 1;
+        int high = 0;
+        int maxLen = 0;
+        int distinct = 0;
 
-        HashSet<Character> chs = new HashSet<>();
-
-        chs.add(s.charAt(0));
-
-        while (high < s.length()) {
-            char ch = s.charAt(high);
-            if ( !chs.contains(ch)) {
-                chs.add(ch);
+        for (int i = 0 ; i < s.length(); i ++) {
+            char ch = s.charAt(i);
+            high ++;
+            if (count[ch] == 0) {
+                distinct ++;
             }
+            count[ch] ++;
 
-            if (chs.size() > 2) {
-                maxLen = Math.max(maxLen, high - low);
-                chs = new HashSet<>(); // important !!! clear
+            while (distinct > k) {
+                char lowCh = s.charAt(low);
+                count[lowCh] --;
                 low ++;
-                high = low + 1;
-                chs.add(s.charAt(low)); // impoartnt!!! add new low char
+                if (count[lowCh] == 0)
+                    distinct --;
             }
-            else {
-                high ++;
-            }
-        }
-        // important !!! rest elements.
-        if (chs.size() > 0) {
             maxLen = Math.max(maxLen, high - low);
         }
         return maxLen;

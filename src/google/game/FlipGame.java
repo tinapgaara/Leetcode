@@ -38,10 +38,9 @@ public class FlipGame {
 
                 boolean flag = !recurCanWin(arr);
 
+                if (flag) return true;
                 arr[i] = '+';
                 arr[i+1] = '+';
-
-                if (flag) return true;
             }
         }
         return false;

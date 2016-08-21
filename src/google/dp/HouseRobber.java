@@ -18,40 +18,15 @@ public class HouseRobber {
 
     public int rob(int[] nums) {
         if ( (nums == null) || (nums.length == 0) ) return 0;
-        int[] indexs = new int[nums.length];
         int[] maxMoney = new int[nums.length];
         maxMoney[0] = nums[0];
-        indexs[0] = 0;
+        if (nums.length == 1) return maxMoney[0];
+        if (nums[0]  < nums[1]) maxMoney[1] = nums[1];
+        else maxMoney[1] = nums[0];
 
-        for (int i = 1; i < nums.length; i ++) {
-            if (indexs[i-1] + 1 == i) {
-                if (i-2 >= 0) {
-                    if (maxMoney[i-2]+ nums[i] > maxMoney[i-1]) {
-                        maxMoney[i] = maxMoney[i-2]+ nums[i];
-                        indexs[i] = i;
-                    }
-                    else {
-                        maxMoney[i] = maxMoney[i-1];
-                        indexs[i] = indexs[i-1];
-                    }
-                }
-                else {
-                    if (maxMoney[i-1] > nums[i]) {
-                        maxMoney[i] = maxMoney[i-1];
-                        indexs[i] = indexs[i-1];
-                    }
-                    else {
-                        maxMoney[i] = nums[i];
-                        indexs[i] = i;
-                    }
-                }
-            }
-            else {
-                maxMoney[i] = maxMoney[i-1] + nums[i];
-                indexs[i] = i;
-            }
+        for (int i = 2; i < nums.length; i ++) {
+            maxMoney[i] = Math.max(maxMoney[i-2] + nums[i], maxMoney[i-1]);
         }
-
         return maxMoney[nums.length-1];
     }
 

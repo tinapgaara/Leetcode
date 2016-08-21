@@ -34,6 +34,7 @@ public class Random2ImpleRandom6 {
     }
 
     // rand 25 = 5 * (rand5() -1)  + rand5();
+    // rand(a^2) = a * rand(a) + rand(a)
     public int generateRandom25UsingRandom5() {
         Random random = new Random();
 

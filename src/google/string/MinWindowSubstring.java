@@ -38,26 +38,19 @@ public class MinWindowSubstring {
             if (sCounts[s.charAt(end) - '0'] <= tCounts[s.charAt(end) - '0']) // Important !!!! must be <=. for "aa", "aa"
                 coverCh ++;
             if (coverCh == tLen) {
-                //
                 while ( (start < s.length()) && ((!t.contains(s.charAt(start) + "")) ||
                         (sCounts[s.charAt(start) - '0'] > tCounts[s.charAt(start) - '0']))) { // because, boundary case: "aa" "aa"
                     sCounts[s.charAt(start) - '0'] --; // Important !!!! first abstract the sCounts, then start ++
 
                     start ++;
-                    // System.out.println("move right:"+ start+ "'s char:"+ s.charAt(start) + " start's count:" + sCounts[s.charAt(start) - '0']);
-                    System.out.println(s.charAt(start) + ", "+ s.charAt(end)+ " "+sCounts[s.charAt(start) - '0'] +"; " + tCounts[s.charAt(start) - '0']);
+
                 }
                 int curLen = end - start + 1;
-                System.out.println(s.substring(start, start+curLen));
                 if (curLen < minLen) {
                     minLen = curLen;
                     low = start;
                     high = end;
                 }
-                /*
-                if (start >= 0)
-                    System.out.println("cur pos:"+ start+ "'s char:"+ s.charAt(start) +"....." + s.charAt(end)+ coverCh);
-                    */
                 sCounts[s.charAt(start) - '0'] --;
                 coverCh --;
                 start ++;

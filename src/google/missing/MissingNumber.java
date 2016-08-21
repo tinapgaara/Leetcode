@@ -17,4 +17,5 @@ nlog(n)
 
 * */
 public class MissingNumber {
+
 }

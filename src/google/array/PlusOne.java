@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * Created by yingtan on 11/8/15.
- */
+*/
 public class PlusOne {
 
     public List<Integer> plusOne(int[] num) {

@@ -9,7 +9,6 @@ public class TestThread_2 extends Thread {
 	}
 	
 	public void run() {
-		
 
 		ClassForTest.Token token = null;		
 		while (token == null) {
@@ -26,7 +25,7 @@ public class TestThread_2 extends Thread {
 			}
 		}
 		
-		try {
+		try { // 三行会并行吗？
 			int val = mObjForTest.read_Safe(token);
 			val = val + 1;
 			mObjForTest.write_Safe(val, token);

@@ -25,31 +25,18 @@ public class findMinInRotatedArr {
     }
 
     public int recurFindMin(int[] nums, int low, int high) {
-        if (low >= high) {
-            if (low -1 == nums.length -1) return nums[nums.length -1]; // Important !!!  for [0 1 2 3]
-            else if (high + 1 == 0) return nums[0]; // Important !!! for [1 2 3 0]
+        if (low > high) return -1;
+        if (low == high) {
             return nums[low];
         }
+
         int med = (low + high) / 2;
-
-
-        if ((med < nums.length -1) && (med > 0)) { // for [4 0 5]: med value
-            if ((nums[med] < nums[med - 1]) && (nums[med] < nums[med + 1]))
-                return nums[med];
-        }
-
-        if (nums[low] < nums[high]) { // for increasing : [ 1 2 3]
-            return recurFindMin(nums, low, med - 1);
+        if (nums[med] < nums[high]) {
+            return recurFindMin(nums, low, med);
         }
         else {
-            if ((nums[med] <= nums[high]) && (nums[med] <= nums[low])) { // for [4 2 3 0]
-                return recurFindMin(nums, low, med - 1);
-            }
-            else if ((nums[med] >= nums[high]) && (nums[med] >= nums[low])) { // for [5 7 6]
-                return recurFindMin(nums, med + 1, high);
-            }
+            return recurFindMin(nums, med+1, high);
         }
-        return 0;
     }
 /*  *
     * Find Minimum in Rotated Sorted Array II

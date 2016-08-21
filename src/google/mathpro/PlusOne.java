@@ -27,8 +27,4 @@ public class PlusOne {
         }
         return res;
     }
-
-    // how to deal with million digits array ?
-
-
 }

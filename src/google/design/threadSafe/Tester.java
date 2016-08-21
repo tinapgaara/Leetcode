@@ -9,8 +9,26 @@ public class Tester {
     	/*
     	tester.doTest_1();
     	//*/
-    	tester.doTest_2();
+    	tester.test();
     }
+
+	public void test() {
+
+		final int numThreads = 1000;
+		Box box = new Box();
+		TestThread[] threads = new TestThread[numThreads];
+
+		for (int i = 0; i < numThreads; i++) {
+			threads[i] = new TestThread(box);
+		}
+
+		for (int i = 0 ; i < numThreads; i ++) {
+			threads[i].run(); // run 100 times inc()
+		}
+
+		System.out.print(box.get());
+
+	}
     
     public void doTest_1() {
     	

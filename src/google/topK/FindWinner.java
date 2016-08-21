@@ -191,13 +191,14 @@ public class FindWinner {
         return 2* i + 2;
     }
 
+    // use min heap
     public class LogEntryComparator implements Comparator<LogEntry> {
         @Override
         public int compare(LogEntry e1, LogEntry e2) {
-            if (e1.time < e2.time) {
+            if (e1.time > e2.time) {
                 return 1;
             }
-            else if (e1.time > e2.time) {
+            else if (e1.time < e2.time) {
                 return -1;
             }
             return 0;

@@ -16,6 +16,7 @@ public class BinaryTreeSerialization {
 
     private int pos;
     public TreeNode deserialize(String data) {
+        System.out.println(data);
         if(data.length() < 2) return null;
         String[] tokens = data.split(",");
         pos = 0;
@@ -60,7 +61,7 @@ public class BinaryTreeSerialization {
         n6.right = n10;
 
         BinaryTreeSerialization ob = new BinaryTreeSerialization();
-        System.out.println(ob.deserialize(ob.serialize(n11)));
+        System.out.println(ob.deserialize(ob.serialize(n1)));
 
     }
 }

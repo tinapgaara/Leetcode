@@ -22,27 +22,24 @@ public class GenerateParatheses {
         int maxLeft = n;
         int maxRight = n;
 
-        return recurGenerateParenthesis(maxLeft, maxRight, "");
+        recurGenerateParenthesis(maxLeft, maxRight, "", res);
+        return res;
     }
 
-    public List<String> recurGenerateParenthesis(int maxLeft, int maxRight, String str) {
-        List<String> res = new ArrayList<>();
+    public void recurGenerateParenthesis(int maxLeft, int maxRight, String str,  List<String> res) {
 
         if ((maxLeft == 0) && (maxRight == 0)) {
             res.add(str);
-            return res;
         }
         if (maxLeft > 0) {
             String newLeftStr = str + "(";
-            List<String> lefts = recurGenerateParenthesis(maxLeft-1, maxRight, newLeftStr);
-            res.addAll(lefts);
+            recurGenerateParenthesis(maxLeft-1, maxRight, newLeftStr, res);
         }
         if ((maxRight > 0) && (maxLeft < maxRight)) {
             String newRightStr = str + ")";
-            List<String> rights = recurGenerateParenthesis(maxLeft, maxRight-1, newRightStr);
-            res.addAll(rights);
+            recurGenerateParenthesis(maxLeft, maxRight-1, newRightStr, res);
         }
-        return res;
+        // return res;
     }
 
     // old solution

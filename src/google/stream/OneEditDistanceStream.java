@@ -28,7 +28,7 @@ public class OneEditDistanceStream {
         if (cur1.length() < cur2.length()) {
 
             buffer1 = "";
-            buffer1 = cur2.substring(compareLen);
+            buffer2 = cur2.substring(compareLen);
 
             if (cur2.length() - cur1.length() == 1) {
                 if (diff == 0) return true;

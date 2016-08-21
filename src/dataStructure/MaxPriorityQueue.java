@@ -20,7 +20,7 @@ public class MaxPriorityQueue {
     public int m_heapSize;
 
     public int parent(int i) {
-        return i / 2;
+        return (i-1) / 2;
     }
 
     public int left(int i) {

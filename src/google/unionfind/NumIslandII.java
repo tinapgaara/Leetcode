@@ -90,11 +90,10 @@ public class NumIslandII {
     }
 
     private int findRoot(int id) {
-        int root = rootMap.get(id);
-        while (root != rootMap.get(root)) {
-            root = rootMap.get(root);
+        while (id != rootMap.get(id)) {
+            id = rootMap.get(id);
         }
-        return root;
+        return id;
     }
 
     public static void main(String[] args) {

@@ -74,7 +74,9 @@ public class GraphValidTree {
                     if (!isValid) return false;
                 }
                 else if (colors[neighbor] == 1) {
-                    if (parent == nodeNo) return false;
+                    if (parent == nodeNo) {
+                        return false;
+                    }
                 }
                 else return false;
             }
@@ -85,7 +87,7 @@ public class GraphValidTree {
 
     public static void main(String[] args) {
         GraphValidTree tree = new GraphValidTree();
-        int[][] edges = new int[][]{{0,3},{3,2}}; //{0, 1}, {0, 2}, {0, 3}, {1, 4}
-        System.out.println(tree.validTree(4, edges));
+        int[][] edges = new int[][]{{0,1},{1,2}, {2,0}}; //{0, 1}, {0, 2}, {0, 3}, {1, 4}
+        System.out.println(tree.validTree(3, edges));
     }
 }

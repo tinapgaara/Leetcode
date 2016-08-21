@@ -5,6 +5,8 @@ public class BigFinder {
 	private final int SIZE = 0x20000000; // 512M
 	
 	private byte[] mBitmap;
+	// hex: using 0x
+	// 0x80 = bits: 10000000:  8 bits = one byte
 	private byte[] mBits = new byte[] { (byte) 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
 	
     public static void main(String[] args) {

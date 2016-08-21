@@ -8,7 +8,7 @@ public class PackageProblem {
     public static int knapsack(int price[], int weight[], int maxWeight) {
 
         int len = weight.length;
-        int[][] dp = new int[len+1][len+1];
+        int[][] dp = new int[len+1][maxWeight+1];
         for (int i = 0 ; i <= maxWeight; i ++) {
             dp[0][i] = 0;
         }
@@ -17,7 +17,7 @@ public class PackageProblem {
             dp[i][0] = 0;
         }
 
-        for (int i = 0 ; i < len ; i ++) {
+        for (int i = 1 ; i < len ; i ++) {
             for (int j = 0 ; j < maxWeight; j ++) {
                 if (weight[i] >= maxWeight) {
                     dp[i][j] = dp[i-1][j];

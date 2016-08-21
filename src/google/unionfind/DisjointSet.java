@@ -10,7 +10,7 @@ public class DisjointSet {
 
     public DisjointSet(int maxnum) {
         MAX_NUM = maxnum;
-        parent = new int[MAX_NUM];
+        parent = new int[maxnum];
     }
 
     public void makeSet(int x) {
@@ -19,7 +19,7 @@ public class DisjointSet {
 
     public int findSet(int x) {
         if (x != parent[x]) {
-            parent[x] = findSet(parent[x]);
+            parent[x] = findSet(parent[x]); // x = parent[x]
         }
         return parent[x];
     }
@@ -27,7 +27,6 @@ public class DisjointSet {
     public void union(int x, int y) {
         int xParent = findSet(x);
         int yParent = findSet(y);
-        if (xParent == yParent) return;
         parent[xParent] = yParent;
     }
 }
