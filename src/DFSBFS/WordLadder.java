@@ -1,5 +1,6 @@
 package DFSBFS;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
@@ -69,10 +70,16 @@ public class WordLadder {
 
     // Solution 2: do not need to declare Node, can just use another dist Queue.
     public int ladderLength_2(String beginWord, String endWord, Set<String> wordList) {
+        if (beginWord == null || endWord == null || wordList == null) return 0;
         Queue<String> words = new LinkedList<String>();
         Queue<Integer> dist = new LinkedList<Integer>();
         dist.offer(1);
         words.offer(beginWord);
+
+        Set<String> wordSet = new HashSet<String>();
+        for (String w : wordList) {
+            wordSet.add(w);
+        }
 
         while(!words.isEmpty()) {
             String word = words.poll();
@@ -85,12 +92,13 @@ public class WordLadder {
                     chs[i] = (char)k;
 
                     String newstr = new String(chs);
-                    if (newstr.equals(endWord)) {
-                        return dis + 1;
-                    }
-                    if (wordList.contains(newstr)) {
+
+                    if (wordSet.contains(newstr)) {
+                        if (newstr.equals(endWord)) {
+                            return dis + 1;
+                        }
                         words.offer(newstr);
-                        wordList.remove(newstr);
+                        wordSet.remove(newstr);
 
                         dist.offer(dis+1);
                     }

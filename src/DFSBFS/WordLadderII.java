@@ -54,7 +54,7 @@ public class WordLadderII {
 
 
 
-    public List<List<String>> findLadders(String beginWord, String endWord,   Set<String> wordList) {
+    public List<List<String>> findLadders(String beginWord, String endWord, Set<String> wordList) {
         Queue<Node> queue = new LinkedList<>();
         List<List<String>> res = new ArrayList<List<String>>();
         queue.offer(new Node(beginWord, 1, null, 1)); // color = grey
@@ -70,7 +70,7 @@ public class WordLadderII {
             int color = cur.mColor;
 
             if (dist != prevLevel) {
-                wordList.removeAll(curLevelVisited);
+                //wordList.removeAll(curLevelVisited);
                 prevLevel = dist;
                 curLevelVisited.clear();
             }
@@ -88,7 +88,53 @@ public class WordLadderII {
                     chs[i] = newch;
                     String newword = new String(chs);
                     if (wordList.contains(newword)) {
-                        curLevelVisited.add(newword);
+                        //curLevelVisited.add(newword);
+                        wordList.remove(newword);
+                        queue.offer(new Node(newword, dist+1, cur, 1));
+                    }
+                }
+            }
+            cur.mColor = 2;
+        }
+        return res;
+    }
+
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        Queue<Node> queue = new LinkedList<>();
+        List<List<String>> res = new ArrayList<List<String>>();
+        queue.offer(new Node(beginWord, 1, null, 1)); // color = grey
+
+        int prevLevel = 0;
+        int minDist = Integer.MAX_VALUE;
+        Set<String> curLevelVisited = new HashSet<>();
+
+        while (!queue.isEmpty()) {
+            Node cur = queue.poll();
+            String word = cur.mNodeStr; // hit
+            int dist = cur.mDist;
+            int color = cur.mColor;
+
+            if (dist != prevLevel) {
+                //wordList.removeAll(curLevelVisited);
+                prevLevel = dist;
+                curLevelVisited.clear();
+            }
+            if (word.equals(endWord)) {
+                if (dist <= minDist) { // must be <=
+                    minDist = dist;
+                    constructResList(res, cur);
+                }
+                continue;
+            }
+            for (int i = 0 ; i < word.length(); i ++) {
+                for (int j = 0 ; j < 26; j ++) {
+                    char[] chs = word.toCharArray();
+                    char newch = (char)(j + 'a');
+                    chs[i] = newch;
+                    String newword = new String(chs);
+                    if (wordList.contains(newword)) {
+                        //curLevelVisited.add(newword);
+                        wordList.remove(newword);
                         queue.offer(new Node(newword, dist+1, cur, 1));
                     }
                 }

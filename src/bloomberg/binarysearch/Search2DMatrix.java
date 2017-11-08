@@ -27,6 +27,7 @@ Given target = 20, return false.
 * */
 public class Search2DMatrix {
 
+    //Time Complexity: O(m + n)
     public boolean searchMatrix(int[][] matrix, int target) {
         if (matrix == null) {
             return false;

@@ -12,6 +12,9 @@ import java.util.HashMap;
 *  -1 / Integer.MAX_VALUE
 *  1 / Integer.MIN_VALUE
 *
+*  复杂度
+时间 O(N) 空间 O(N)
+*
 * */
 public class Fraction2RecurDecimal {
 
@@ -39,6 +42,7 @@ public class Fraction2RecurDecimal {
         dividend = gNumerator / gDenominator;
         long tmpDividend = dividend; //// Important !!! Need to keep this value
 
+        // 存循环体remainder以及这个循环体
         HashMap<Long, Integer> map = new HashMap<Long, Integer>();
         String result =  ".";
         if (remainder == 0){ // Important !!! All returns need to judge + or -.
@@ -48,10 +52,12 @@ public class Fraction2RecurDecimal {
             }
             return divide;
         }
+        //current len of result string
         int cur = 1;
         while (remainder > 0) {
             remainder = remainder * 10; //40
             if (map.containsKey(remainder)) {
+                // 循环体开始的index
                 int start = map.get(remainder);
                 String divide = tmpDividend + "";
                 if (neg) {

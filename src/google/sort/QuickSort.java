@@ -68,10 +68,10 @@ public class QuickSort {
                 j--;
             }
         }
-
+        // element j will stay at its correct place
         // i turns to pivotIndex
         // recursively sort two sub parts
-        if (low < i -1 )
+        if (low < j)
             quickSort_2(arr, low, i - 1);
 
         if (high > i)
@@ -152,9 +152,9 @@ public class QuickSort {
 
 
     public static void main(String[] args) {
-        int[] nums = new int[]{4,7,3,2,1,5,6};
+        int[] nums = new int[]{3, 7,8,5,2,1,9,5,4};
         QuickSort ob = new QuickSort();
-        ob.quickSort_1(nums, 0, nums.length - 1);
+        ob.quickSort_2(nums, 0, nums.length - 1);
         System.out.println("");
     }
 }

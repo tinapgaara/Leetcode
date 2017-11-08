@@ -1,5 +1,8 @@
 package google.dp;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  * Created by yingtan on 11/2/15.
  */
@@ -33,7 +36,23 @@ public class LongestIncreaseSubsequence {
     }
 
     // Sol_2: O(NlogN)
-
+    // o(nlogn)
+    // dp stores the increasing sequence
+    public int longestIncrease_DPBest(int[] nums) {
+        ArrayList<Integer> dp = new ArrayList<Integer>(nums.length);
+        for (int num : nums) {
+            if (dp.size() == 0 || dp.get(dp.size()-1) < num) dp.add(num);
+            else {
+                // find the first index in minLast whose value > nums[i], override this value
+                // because we want the end value is small
+                // eg: 123   124, then 123 is more easier to increase to longer increasing string than 124
+                int i = Collections.binarySearch(dp, num);
+                if (i < 0) dp.set(-(i+1), num);
+                else dp.set(i, num);
+            }
+        }
+        return dp.size();
+    }
 
 
     // Solution 1: count sort

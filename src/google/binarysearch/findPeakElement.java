@@ -20,9 +20,37 @@ Note:
 Your solution should be in logarithmic complexity.
 *
 * */
-public class findPeakElement {
+public class FindPeakElement {
 
+
+    // while loop using binary search
+    // Sol1 : binary search
     public int findPeakElement(int[] nums) {
+        if(nums == null || nums.length == 0) return -1;
+
+        // find the first pos where curNum > nextNum
+        int start = 0;
+        int end = nums.length - 1;
+        while(start + 1 < end) {
+            int mid = start + (end - start) / 2;
+            // still increasing, not the one we want, search right side
+            if (mid +1 < nums.length && nums[mid] < nums[mid + 1]) {
+                start = mid + 1;
+            }
+            else {
+                end = mid;
+            }
+        }
+
+        if (nums[start] > nums[end]) {
+            return start;
+        }
+        return end;
+    }
+
+
+
+    public int findPeakElement_recur(int[] nums) {
         if ( (nums == null) || (nums.length == 0))  return 0;
         return recurFindPeakElement(nums, 0, nums.length -1);
     }

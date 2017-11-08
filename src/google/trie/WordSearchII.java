@@ -1,12 +1,108 @@
 package google.trie;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
  * Created by yingtan on 11/9/15.
  */
 public class WordSearchII {
+
+    public class Trie {
+        public Trie[] children;
+
+        public Trie() {
+            children = new Trie[27];
+        }
+    }
+
+    public void add(Trie node, String word) {
+        Trie cur = node;
+        for (char ch : word.toCharArray()) {
+            if (cur.children[ch - 'a'] == null) {
+                // insert
+                cur.children[ch - 'a'] = new Trie();
+            }
+            cur = cur.children[ch - 'a'];
+        }
+    }
+
+    public boolean search(Trie node, String word) {
+        Trie cur = node;
+        for (char ch : word.toCharArray()) {
+            if (cur.children[ch - 'a'] == null) {
+                return false;
+            }
+            cur = cur.children[ch - 'a'];
+        }
+        if (cur != null) return true;
+        else return false;
+    }
+
+    public boolean startsWith(Trie node, String word) {
+        Trie cur = node;
+        for (char ch : word.toCharArray()) {
+            if (cur.children[ch - 'a'] != null) {
+                return true;
+            }
+            cur = cur.children[ch - 'a'];
+        }
+        if (cur != null) return true;
+        else return false;
+    }
+
+
+    public List<String> findWords(char[][] board, String[] words) {
+        List<String> res = new ArrayList<String>();
+        if (board == null || board.length == 0 || words == null) return res;
+
+        int row = board.length;
+        int col = board[0].length;
+
+        // create Trie
+        Trie trie = new Trie();
+        for (int i = 0 ; i < words.length; i ++) {
+            add(trie, words[i]);
+        }
+
+        boolean[][] vis = new boolean[row][col];
+        // Need to use hashset, instead of arraylist
+        HashSet<String> set = new HashSet<String>();
+        for (int i = 0 ; i < row ; i ++) {
+            for (int j = 0 ; j < col; j ++) {
+                recurSearch(trie, board, i, j, vis, "", set);
+            }
+        }
+
+        for (String w : set) {
+            res.add(w);
+        }
+        return res;
+    }
+
+    public void recurSearch(Trie node, char[][] board, int i, int j, boolean[][] vis, String str, HashSet<String> set) {
+        if ( (i >= 0) && (i < board.length) && (j >= 0) && (j < board[0].length) ) {
+            if (! vis[i][j]) {
+                vis[i][j] = true;
+
+                String newWord = str + board[i][j];
+                if (startsWith(node, newWord)) {
+                    if (search(node, newWord)) {
+                        if (! set.contains(newWord)) { // Important !!!
+                            set.add(newWord);
+                        }
+                    }
+                    // only when words startsWith this new word, then go further DFS
+                    recurSearch(node, board, i+1, j, vis, newWord, set);
+                    recurSearch(node, board, i-1, j, vis, newWord, set);
+                    recurSearch(node, board, i, j+1, vis, newWord, set);
+                    recurSearch(node, board, i, j-1, vis, newWord, set);
+                }
+                vis[i][j] = false;
+            }
+        }
+    }
 
     public static class TrieNode {
         public char ch;
@@ -63,7 +159,7 @@ public class WordSearchII {
         return false;
     }
 
-    public List<String> findWords(char[][] board, String[] words) {
+    public List<String> findWords2(char[][] board, String[] words) {
         List<String> res = new ArrayList<String>();
         if ((board == null) || (words == null) || (words.length == 0))
             return res;
@@ -118,7 +214,7 @@ public class WordSearchII {
         // char[][] board = new char[][]{{'o','a','a','n'}, {'e','t','a','e'}, {'i','h','k','r'}, {'i','f','l','v'}};
         char[][] board = new char[][]{{'a','b', 'c'}, {'a','e', 'd'}, {'a', 'f', 'g'}};
         String[] words = new String[]{"abcdefg","gfedcbaaa","eaabcdgfa","befa","dgc","ade"};
-        System.out.println(ob.startsWith("oa", 0, root));
+        //System.out.println(ob.startsWith("oa", 0, root));
         System.out.println(ob.findWords(board, words));
     }
 }

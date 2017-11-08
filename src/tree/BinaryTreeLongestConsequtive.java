@@ -29,4 +29,28 @@ public class BinaryTreeLongestConsequtive {
         int max = Math.max(maxLeft, maxRight);
         return Math.max(level, max); // Important !!!
     }
+
+
+    public int longestConsecutiveShorter(TreeNode root) {
+        if (root == null) return 0;
+        return recurLongest(root, 0, root.val - 1);
+    }
+
+    public int recurLongest(TreeNode cur, int curLen, int prevVal) {
+        if (cur == null) return curLen;
+        if (prevVal + 1 == cur.val) {
+            // consecutive
+            curLen = curLen + 1;
+        }
+        else {
+            curLen = 1;
+        }
+
+        // Important !!
+        /// 返回当前长度，左子树长度，和右子树长度中较大的那个
+        //  1
+        // 2  3
+        //4 5
+        return Math.max(curLen, Math.max(recurLongest(cur.left, curLen, cur.val), recurLongest(cur.right, curLen, cur.val)));
+    }
 }

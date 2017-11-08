@@ -30,7 +30,7 @@ import java.util.Map;
 * */
 public class LRUCache {
 
-    public List<Integer> m_visitedKeys; // oldest element is at tail of the lists
+    public List<Integer> m_visitedKeys; // oldest element is at head of the lists
     public Map<Integer, Integer> m_cache; // elements stored in cache
     public int m_maxCapacity;
 

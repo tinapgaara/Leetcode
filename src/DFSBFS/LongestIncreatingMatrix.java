@@ -8,13 +8,12 @@ public class LongestIncreatingMatrix {
     private int[] dirX = {0, 1, 0, -1};
     private int[] dirY = {1, 0, -1, 0};
 
-    // down to top, using isVisitedFlag
     public int longestIncreasingPath2(int[][] matrix) {
         if ( (matrix == null) || (matrix.length == 0) )
             return 0;
         int row = matrix.length;
         int col = matrix[0].length;
-        int maxLen = 0;
+        int maxLen = 1;
 
         int[][] longestPathFromCurNode = new int[row][col];
         for (int i = 0 ; i < row ; i ++) {
@@ -23,27 +22,43 @@ public class LongestIncreatingMatrix {
             }
         }
         return maxLen;
-
     }
 
-    public int dfs(int[][] matrix, int x, int y, int[][] longestPathFromCurNode) {
-        if (longestPathFromCurNode[x][y] != 0)
-            return longestPathFromCurNode[x][y];
+    public int longestIncreasingPath_1(int[][] matrix) {
+        if ( (matrix == null) || (matrix.length == 0) )
+            return 0;
+        int row = matrix.length;
+        int col = matrix[0].length;
+        int maxLen = 1;
 
-        for (int i = 0 ; i < 4; i ++) {
-            int curX = x + dirX[i];
-            int curY = y + dirY[i];
-
-            if ( (curX >= 0) && (curX < longestPathFromCurNode.length)
-                    && (curY >= 0) && (curY < longestPathFromCurNode[0].length) ) {
-                if (matrix[curX][curY] > matrix[x][y]) {
-                    longestPathFromCurNode[x][y] = Math.max(longestPathFromCurNode[x][y],
-                                                            dfs(matrix, curX, curY, longestPathFromCurNode));
-                }
-
+        int[][] path = new int[row][col];
+        for (int i = 0 ; i < row ; i ++) {
+            for (int j = 0; j < col; j++) {
+                maxLen = Math.max(maxLen, dfs(matrix, i, j, path));
             }
         }
-        return longestPathFromCurNode[x][y] + 1;
+        return maxLen;
+    }
+
+    public int dfs(int[][] matrix, int x, int y, int[][] path) {
+        if (path[x][y] != 0) return path[x][y];
+        int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+        int max = 0;
+        for (int i = 0 ; i < 4 ; i ++) {
+            int nextX = x + dirs[i][0];
+            int nextY = y + dirs[i][1];
+
+            if ( (nextX >= 0) && (nextX < matrix.length) && (nextY >= 0) && (nextY < matrix[0].length) ) {
+                // increasing
+                if (matrix[nextX][nextY] > matrix[x][y]) {
+                    int len = dfs(matrix, nextX, nextY, path);
+                    max = Math.max(max, len);
+                }
+            }
+        }
+        path[x][y] = max + 1;
+        return path[x][y];
     }
 
     // Time exceeds limit

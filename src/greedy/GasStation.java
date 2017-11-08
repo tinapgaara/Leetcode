@@ -5,7 +5,7 @@ package greedy;
  */
 public class GasStation {
 
-    public int canCompleteCircuit(int[] gas, int[] cost) {
+    public int canCompleteCircuit_withBestSolution(int[] gas, int[] cost) {
         if ((gas == null) || (cost == null) || (gas.length == 0) || (cost.length == 0) )
             return -1;
 
@@ -18,9 +18,36 @@ public class GasStation {
             index[i] = i;
         }
         if (sum < 0) return -1;
+        // no need to do that since not asking the best solution
         quicksort(delta, gas, cost, index, 0, gas.length-1);
         return index[0];
 
+    }
+
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        if ((gas == null) || (cost == null) || (gas.length == 0) || (cost.length == 0) )
+            return -1;
+
+        int sum = 0;
+        int total = 0;
+        int startPointMinusOne = -1;
+        for (int i = 0 ; i < gas.length; i ++) {
+            sum = sum + gas[i] - cost[i];
+            total = total + gas[i] - cost[i];
+
+            if (sum < 0) {
+                // change starting point since the previous starting point i causes the minus value of gas in trip
+                startPointMinusOne = i;
+                // reset the sum
+                sum = 0;
+                // no need to change total
+            }
+        }
+        if (total >= 0) {
+            return startPointMinusOne  + 1; // important !!!!
+        }
+        else
+            return -1;
     }
 
     public void quickSort(int[] gas, int[] cost,int[] delta, int[] index, int low, int high) {

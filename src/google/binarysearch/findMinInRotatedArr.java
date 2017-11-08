@@ -15,7 +15,7 @@ Find the minimum element.
 You may assume no duplicate exists in the array.
 */
 
-public class findMinInRotatedArr {
+public class FindMinInRotatedArr {
 
     public int findMin(int[] nums) {
         if ((nums == null) || (nums.length == 0))
@@ -68,7 +68,7 @@ public class findMinInRotatedArr {
     }
 
     public static void main(String[] args) {
-        findMinInRotatedArr ob = new findMinInRotatedArr();
+        FindMinInRotatedArr ob = new FindMinInRotatedArr();
         int[] nums= new int[]{4,1,3};
         System.out.println(ob.findMinDup(nums));
     }

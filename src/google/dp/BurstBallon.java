@@ -13,6 +13,7 @@ public class BurstBallon {
             newNum[i+1] = nums[i];
         }
         newNum[newNum.length-1] = 1;
+        //dp[i][j] : kick all bullons in (i, j) , not include ith and jth bullon
         int[][] dp = new int[newNum.length][newNum.length];
 
         for (int len = 2; len < newNum.length; len ++) {

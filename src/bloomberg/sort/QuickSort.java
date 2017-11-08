@@ -5,6 +5,16 @@ package bloomberg.sort;
  */
 public class QuickSort {
 
+    //sort decreasing
+    /*
+    *  It first divides a large list into two smaller sub-lists and then recursively sort the two sub-lists
+    *  the basic step of sorting an array are as follows:
+
+Select a pivot, normally the middle one
+From both ends, swap elements and make left elements < pivot and all right > pivot
+Recursively sort left part and right part
+    *
+    * */
     public void quickSort(int[] nums, int low, int high) {
 
         if (low >= high) return; // low>=high return

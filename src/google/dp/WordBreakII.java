@@ -68,6 +68,49 @@ public class WordBreakII {
         }
     }
 
+    public List<String> wordBreak2(String s, List<String> wordDict) {
+        if ( (wordDict == null) || (s == null) || (s.length() == 0) ) return null;
+        List<String>[] dp = new ArrayList[s.length() + 1];
+        dp[0] = new ArrayList<>();
+        for (int i = 0 ; i < s.length(); i ++) {
+            if (dp[i] == null) continue;
+            for (String word : wordDict) {
+                int len = word.length();
+                if (i + len > s.length())  continue;
+                String subs = s.substring(i, i + len);
+
+                if (word.equals(subs)) {
+                    if(dp[i+len] == null) {
+                        dp[i+len] = new ArrayList<String>();
+                    }
+                    dp[i+len].add(word);
+                }
+            }
+        }
+
+        List<String> tmp = new ArrayList<String>();
+        List<String> res = new ArrayList<String>();
+        dfs(dp, res, tmp, s.length());
+        return res;
+    }
+
+    public void dfs(List<String>[] dp, List<String> res, List<String> tmp, int dpIndex) {
+        if (dpIndex <= 0) {
+            String path = tmp.get(tmp.size() - 1);
+            for (int i = tmp.size() - 2; i >=0 ; i --) {
+                path = path + " " + tmp.get(i);
+            }
+            res.add(path);
+
+            return;
+        }
+        for (String word : dp[dpIndex]) {
+            tmp.add(word);
+            dfs(dp, res, tmp, dpIndex - word.length());
+            tmp.remove(tmp.size() - 1) ; // remove word added
+        }
+    }
+
     public static void main(String[] args) {
         WordBreakII ob = new WordBreakII();
         String word = "catsanddog";
@@ -78,6 +121,13 @@ public class WordBreakII {
         words.add("sand");
         words.add("dog");
 
-        System.out.println(ob.wordBreak(word, words));
+        List<String> word2s = new ArrayList<>();
+        word2s.add("cat");
+        word2s.add("cats");
+        word2s.add("and");
+        word2s.add("sand");
+        word2s.add("dog");
+
+        System.out.println(ob.wordBreak2(word, word2s));
     }
 }

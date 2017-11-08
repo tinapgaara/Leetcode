@@ -24,32 +24,40 @@ public class SearchInRotatedSortedArray {
     //  if (target > A[med] && target <= A[high]) search right; else search left
 
     public int search(int[] nums, int target) {
-        return binarySearch(nums, target, 0, nums.length - 1);
-    }
-
-    public int binarySearch(int[] nums, int target, int low, int high) {
-
-        if (low > high) return -1;
-
-        int med = (low + high) / 2;
-        if (nums[med] == target) {
-            return med;
+        if (nums == null || nums.length == 0) {
+            return -1;
         }
-        if (nums[med] < nums[high]) {
-            if ((target > nums[med]) && (target <= nums[high])) {
-                return binarySearch(nums, target, med+1,high);
+        int start = 0;
+        int end = nums.length - 1;
+        while (start + 1 < end) {
+            int mid = start + (end - start) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            }
+            // assume no duplicate
+            if (nums[start] < nums[mid]) {
+                if (nums[start] <= target && target <= nums[mid]) {
+                    end = mid;
+                }
+                else {
+                    start = mid + 1;
+                }
             }
             else {
-                return binarySearch(nums, target, low, med-1);
+                if (nums[mid] <= target && target <= nums[end]) {
+                    start = mid;
+                }
+                else {
+                    end = mid - 1;
+                }
             }
         }
-        else { // low  < med
-            if ((target >= nums[low]) && (target < nums[med])) {
-                return binarySearch(nums, target, low, med-1);
-            }
-            else {
-                return binarySearch(nums, target, med+1, high);
-            }
+        if (nums[start] == target) {
+            return start;
         }
+        if (nums[end] == target) {
+            return end;
+        }
+        return -1;
     }
 }

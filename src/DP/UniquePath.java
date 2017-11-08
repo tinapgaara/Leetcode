@@ -30,4 +30,52 @@ public class UniquePath {
         }
         return uniqueNums[m-1][n-1];
     }
+
+    // use only one row and one col
+
+    public int uniquePaths_rollingRows(int m, int n) {
+        int[] rowDp = new int[n];
+        int[] colDp = new int[m];
+
+        for (int i = 0 ; i < m ; i ++) {
+            colDp[i] = 1;
+        }
+        for (int j = 0; j < n; j ++) {
+            rowDp[j] = 1;
+        }
+
+        for (int i = 1; i < m ; i ++) {
+            for (int j = 1; j < n; j ++) {
+                rowDp[j] = rowDp[j] + colDp[i];
+                colDp[i] = rowDp[j];
+            }
+        }
+        return rowDp[n-1];
+    }
+
+    // simplified to only use one row
+    public int uniquePaths_best(int m, int n) {
+        int[] rowDp = new int[n];
+        //int[] colDp = new int[m];
+
+        /* Can be simplified
+        for (int i = 0 ; i < m ; i ++) {
+            colDp[i] = 1;
+        }
+        */
+
+        for (int j = 0; j < n; j ++) {
+            rowDp[j] = 1;
+        }
+
+        for (int i = 1; i < m ; i ++) {
+            for (int j = 1; j < n; j ++) {
+                //rowDp[j] = rowDp[j] + colDp[i];
+                //colDp[i] = rowDp[j];
+                // can be simplified to the following:
+                rowDp[j] = rowDp[j] + rowDp[j-1];
+            }
+        }
+        return rowDp[n-1];
+    }
 }

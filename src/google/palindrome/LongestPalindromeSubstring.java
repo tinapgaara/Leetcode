@@ -34,6 +34,7 @@ public class LongestPalindromeSubstring {
                         flag[low][high] = false;
                 }
 
+
             }
         }
         return s.substring(index[0], index[1]+1);

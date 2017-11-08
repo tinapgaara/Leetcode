@@ -23,23 +23,20 @@ Note: If there are several possible values for h, the maximum one is taken as th
 public class HIndex {
 
     public int hIndex(int[] citations) {
-
+        if (citations == null || citations.length == 0) return 0;
         Arrays.sort(citations);
+        // candidate h must be of one of [1 - citations.length] because it is the number of N papers
+        int len = citations.length;
+        for (int i = 0 ; i < len; i ++) {
+            int paperNum = len - i;
+            int hValue = paperNum;
+            if (citations[i] >= hValue) {
+                // there are paperNum papers whose value >= citations[i] >= hValue
 
-        int threshold = 0;
-        for (int i = 0 ; i < citations.length; i ++) {
-            threshold = citations.length - (i);
-            if (citations[i] >= threshold) {
-                return threshold;
+                // max value, i is smaller, hValue is larger
+                return hValue;
             }
         }
         return 0;
-    }
-
-    public static void main(String[] args) {
-        int[] citations = new int[]{0,1,3,5,6};
-        HIndex ob = new HIndex();
-        int x = ob.hIndex(citations);
-        System.out.println(x);
     }
 }

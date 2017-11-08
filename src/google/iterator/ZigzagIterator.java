@@ -27,8 +27,54 @@ The "Zigzag" order is not clearly defined and is ambiguous for k > 2 cases. If "
 [8,9]
 It should return [1,4,8,2,5,9,3,6,7].
 * */
+
 public class ZigzagIterator {
 
+    List<Integer> v1;
+    List<Integer> v2;
+    int i;
+    int j;
+    int listId = 1;
+
+    public ZigzagIterator(List<Integer> v1, List<Integer> v2) {
+        this.v1 = v1;
+        this.v2 = v2;
+        i = 0;
+        j = 0;
+
+    }
+
+    public int next() {
+        int res = -1;
+        if (i >= v1.size()) {
+            res = v2.get(j);
+            j ++;
+        }
+        else if (j >= v2.size()) {
+            res = v1.get(i);
+            i ++;
+        }
+        else {
+            if (listId == 1) {
+                res = v1.get(i);
+                i ++;
+                listId = 2;
+            }
+            else {
+                res = v2.get(j);
+                j ++;
+                listId = 1;
+            }
+        }
+        return res;
+    }
+
+
+    public boolean hasNext() {
+        return (i < v1.size() || j < v2.size());
+    }
+
+    /*
     private List<List<Integer>> lists;
     private int pos;
     private int listNo;
@@ -87,4 +133,5 @@ public class ZigzagIterator {
         }
 
     }
+    */
 }

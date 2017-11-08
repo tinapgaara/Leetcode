@@ -16,6 +16,38 @@ For example,
 * */
 public class Permutations {
 
+    public List<List<Integer>> permute_top2Down(int[] nums) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+
+        if (nums == null) return res;
+        return recurPermute(nums, 0);
+    }
+
+    public List<List<Integer>> recurPermute(int[] nums, int index) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        if (index == nums.length - 1) {
+            List<Integer> list = new ArrayList<Integer>();
+            list.add(nums[index]);
+            res.add(list);
+            return res;
+        }
+        int num = nums[index];
+        List<List<Integer>> next = recurPermute(nums, index + 1);
+
+
+        for (List<Integer> list : next) {
+            for (int i = 0 ; i < list.size(); i ++) {
+                List<Integer> copy = new ArrayList<Integer>(list);
+                copy.add(i, num); // add element at position i
+                res.add(copy);
+            }
+            List<Integer> lastCopy = new ArrayList<Integer>(list);
+            lastCopy.add(num); // add tail
+            res.add(lastCopy);
+        }
+        return res;
+    }
+
     public List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> res = new ArrayList<List<Integer>>();
         if (nums == null) {

@@ -1,5 +1,8 @@
 package google.sum;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 /**
  * Created by max2 on 11/10/15.
  */
@@ -22,6 +25,7 @@ public class ThreeSumSmaller {
 
     public int threeSumSmaller(int[] nums, int target) {
         if ((nums == null) || (nums.length == 0)) return 0;
+        Arrays.sort(nums);
         int p1 = 0;
         int count = 0;
         while (p1 < nums.length -2) {

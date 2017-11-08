@@ -7,35 +7,28 @@ public class MaxSquare {
 
     public int maximalSquare(char[][] matrix) {
         if (matrix == null) return 0;
+
+        int max = 0;
         int row = matrix.length;
-        if (row == 0) return 0;
         int col = matrix[0].length;
 
-        int[][] edges = new int[row][col];
-        int maxEdgeNum = 0;
-        for (int i = 0 ; i < edges.length; i ++) {
-            if (matrix[i][0] == '1') {
-                edges[i][0] = 1;
-                maxEdgeNum = 1;
-            }
-        }
-        for (int i = 0; i < edges[0].length; i ++) {
-            if (matrix[0][i] == '1') {
-                edges[0][i] = 1;
-                maxEdgeNum = 1;
-            }
-        }
+        // dp(i, j) represents the length of the square
+        // whose lower-right corner is located at (i, j)
+        // dp(i, j) = min{ dp(i-1, j-1), dp(i-1, j), dp(i, j-1) }
 
-        for (int i = 1; i < edges.length; i ++) {
-            for (int j = 1; j < edges[0].length; j ++) {
-                if (matrix[i][j] == '1') {
-                    int newEdgeNum
-                            = Math.min(edges[i-1][j-1], Math.min(edges[i-1][j], edges[i][j-1])) + 1;
-                    edges[i][j] = newEdgeNum;
-                    maxEdgeNum = Math.max(maxEdgeNum, newEdgeNum);
+        // need to keep track of max, inorder to cal max in one block, make length to be row+1 and col+1, and starting from (1,1)
+        int[][] dp = new int[row + 1][col + 1];
+
+        for (int i = 1; i <= row; i++) {
+            for (int j = 1; j <= col; j++) {
+                if (matrix[i - 1][j - 1] == '1') {
+                    dp[i][j] = Math.min(dp[i - 1][j - 1], Math.min(dp[i - 1][j], dp[i][j - 1])) + 1;
+                    max = Math.max(max, dp[i][j]);
                 }
             }
         }
-        return maxEdgeNum * maxEdgeNum;
+
+        // return the area
+        return max * max;
     }
 }

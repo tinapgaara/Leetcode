@@ -20,15 +20,17 @@ public class SpiralMatrix {
         int x = 0;
         int y = 0;
 
-        while ((row > 0) && (col > 0)) {
+        while (row > 0 && col > 0) {
             if (row == 1) {
-                for (int i = 0 ; i < col; i ++) {
+                // only one row left
+                for (int j = 0 ; j < col; j ++) {
                     res.add(matrix[x][y]);
                     y ++;
                 }
                 break;
             }
             else if (col == 1) {
+                // only one col left
                 for (int i = 0 ; i < row; i ++) {
                     res.add(matrix[x][y]);
                     x ++;
@@ -36,31 +38,34 @@ public class SpiralMatrix {
                 break;
             }
             // move right
-            for (int i = 0 ; i < col - 1; i ++) { // Important !!! col - 1
+            for (int j = 0 ; j < col - 1; j ++) { // important col -1
                 res.add(matrix[x][y]);
                 y ++;
             }
             // move down
-            for (int i = 0 ; i < row - 1; i ++) { // Important !!! col - 1
+            for (int i = 0 ; i < row - 1; i ++) {// important row -1
                 res.add(matrix[x][y]);
                 x ++;
             }
             // move left
-            for (int i = 0 ; i < col - 1; i ++) { // Important !!! col - 1
+            for (int j = col-1 ; j > 0;  j --) { // important >0
                 res.add(matrix[x][y]);
                 y --;
             }
-            // move up
-            for (int i = 0 ; i < row - 1; i ++) { // Important !!! col - 1
+            // move top
+            for (int i = row-1 ; i > 0;  i --) { // important >0
                 res.add(matrix[x][y]);
                 x --;
             }
+
             row = row - 2;
             col = col - 2;
+
             x ++;
             y ++;
         }
         return res;
+
     }
 
     public List<Integer> spiralOrder(int[][] matrix) {

@@ -22,6 +22,7 @@ public class SqrtX {
     }
 
     public long recurMySqrt(int target, long low, long high) {
+        // important !!!
         if (low > high) return high;
 
         long med = (low + high) / 2;
@@ -73,6 +74,6 @@ public class SqrtX {
 
     public static void main(String[] args) {
         SqrtX ob = new SqrtX();
-        System.out.println(ob.floatSqrt(2, 2));
+        System.out.println(ob.mySqrt(5));
     }
 }

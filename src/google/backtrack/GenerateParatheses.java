@@ -82,4 +82,9 @@ public class GenerateParatheses {
         return res;
 
     }
+
+    public static void main(String[] args) {
+        GenerateParatheses ob = new GenerateParatheses();
+        ob.generateParenthesis(3);
+    }
 }

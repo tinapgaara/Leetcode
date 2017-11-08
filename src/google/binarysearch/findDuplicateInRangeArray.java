@@ -17,7 +17,7 @@ There is only one duplicate number in the array, but it could be repeated more t
 * */
 
 
-public class findDuplicateInRangeArray {
+public class FindDuplicateInRangeArray {
 
     public int findDuplicate(int[] nums) {
         if ((nums == null) || (nums.length == 0)) return 0;
@@ -44,7 +44,7 @@ public class findDuplicateInRangeArray {
     }
 
     public static void main(String[] args) {
-        findDuplicateInRangeArray ob = new findDuplicateInRangeArray();
+        FindDuplicateInRangeArray ob = new FindDuplicateInRangeArray();
         int[] nums = new int[]{1,1,2};
         ob.findDuplicate(nums);
     }

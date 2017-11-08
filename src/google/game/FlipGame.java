@@ -18,7 +18,6 @@ Derive your algorithm's runtime complexity.
 * */
 public class FlipGame {
 
-
     public boolean canWin(String s) {
         if (s == null || s.length() == 0) {
             return false;
@@ -27,22 +26,29 @@ public class FlipGame {
         char[] arr = s.toCharArray();
 
         return recurCanWin(arr);
-
     }
-
+    // for i, i+1, flip, and then check canWin(newarr), if !canWin(newarr), return true
+    // if loop all is and i+1 and flip, all canWin(newarr) returns true, then return false
     public boolean recurCanWin(char[] arr) {
         for (int i = 0 ; i < arr.length -1; i ++) {
             if ((arr[i] == '+') && (arr[i+1] == '+')) {
                 arr[i] = '-';
                 arr[i+1] = '-';
 
-                boolean flag = !recurCanWin(arr);
+                boolean canWin = recurCanWin(arr);
 
-                if (flag) return true;
+                // important ! before return, must flip back
                 arr[i] = '+';
                 arr[i+1] = '+';
+
+                if (! canWin) return true;
             }
         }
         return false;
+    }
+
+    public static void main(String[] args) {
+        FlipGame ob = new FlipGame();
+        System.out.println(ob.canWin("++++"));
     }
 }

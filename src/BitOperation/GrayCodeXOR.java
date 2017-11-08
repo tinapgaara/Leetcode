@@ -42,4 +42,36 @@ public class GrayCodeXOR {
         }
         return res;
     }
+
+
+    // Solution 2:  use recursion
+    public List<Integer> grayCodeRecur(int n) {
+        List<Integer> res = new ArrayList<Integer>();
+
+        if (n == 0) {
+            res.add(0);
+            return res;
+        }
+
+
+        List<Integer> prev = grayCodeRecur(n-1);
+
+        // generate cur graycode list
+        for (Integer num : prev) {
+            // add bit 0 in front of all bits
+            res.add(num);
+        }
+
+        for (int j = prev.size() - 1; j >= 0 ; j --) {
+            // add bit one in front of all bits
+            res.add(prev.get(j)  ^ (1 << (n - 1)));
+        }
+        return res;
+    }
+
+
+    public static void main(String[] args) {
+        GrayCodeXOR ob = new GrayCodeXOR();
+        ob.grayCode(4);
+    }
 }

@@ -6,6 +6,49 @@ package google.file;
 public class Read4 {
     public String buffer = "";
 
+    public int read_new(char[] buf, int n) {
+        int res = 0;
+        // Step 1:  find if can find n in left buff
+        int existLen = buffer.length();
+        int readBufLen = Math.min(existLen, n);
+        for (int i = 0 ; i < readBufLen; i ++) {
+            buf[i] = buffer.charAt(i);
+        }
+        // after getting sth from buffer, substring buffer
+        buffer = buffer.substring(readBufLen, buffer.length());
+        res = res + readBufLen;
+
+        // Step 2: find the left part in read4
+        // new chs needed
+        int newReadLen = n - res;
+        // one time chs read from read4
+        int read4Len = 0;
+        // how many chs actually needed
+        int readActualLen = 0;
+        char[] read4Buf = new char[4];
+
+        while (newReadLen > 0) {
+            read4Len = read4(read4Buf);
+            if (read4Len == 0) break;
+            readActualLen = Math.min(read4Len, newReadLen);
+            for (int i = 0 ; i < readActualLen; i ++) {
+                buf[i+res] = read4Buf[i];
+            }
+            res = res + readActualLen;
+            newReadLen = newReadLen - readActualLen;
+        }
+
+        // Step 3: store left chs in read4 to buff
+        int storeBufLen = read4Len - readActualLen;
+        if (storeBufLen > 0) {
+            for (int i = 0 ; i < storeBufLen; i ++) {
+                buffer = buffer + read4Buf[readActualLen+ i];
+            }
+        }
+        return res;
+    }
+
+
     public int read(char[] buf, int n) {
         // keep track of result len
         int res = 0;

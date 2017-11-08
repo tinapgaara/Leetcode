@@ -1,6 +1,8 @@
 package google.dp;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -19,67 +21,53 @@ Return true because "leetcode" can be segmented as "leet code".
 * */
 public class WordBreak {
 
-    // dp 2-dim
-    public boolean wordBreak(String s, Set<String> wordDict) {
-        if ((wordDict == null) || (s == null) || (s. length() == 0))
-            return true;
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if (s == null || wordDict.size() == 0) return false;
+        int start = 0;
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
 
-        boolean[][] isSeg = new boolean[s.length()][s.length()];
-
-        for (int len = 0; len < s.length(); len ++) { // n
-            for (int low = 0 ; low < s.length() - len; low ++) { // n
-                int high = len + low;
-                String str = s.substring(low, high+1);
-                if (wordDict.contains(str)) {
-                    isSeg[low][high] = true;
-                }
-                else {
-                    for (int k = low; k < high; k ++) { // k
-                        if (isSeg[low][k] && isSeg[k+1][high]) {
-                            isSeg[low][high] = true;
-                            break;
-                        }
+        while (start < s.length()) {
+            if (dp[start]) {
+                for (String word : wordDict) {
+                    int end = start + word.length();
+                    if (end <= s.length()) {
+                        String subword = s.substring(start, end);
+                        if ( (subword != null) && (subword.equals(word)) ) {
+                            dp[end] = true;
+                         }
                     }
                 }
             }
+            start ++;
         }
-        return isSeg[0][s.length()-1];
+        return dp[s.length()];
     }
 
-    // dp 1-dim
-    public boolean wordBreak_1Dim(String s, Set<String> wordDict) {
-        if ((wordDict == null) || (s == null) || (s.length() == 0))
-            return true;
+    public boolean wordBreak_normalDP(String s, List<String> wordDict) {
+        if (s == null || wordDict.size() == 0) return false;
+        int start = 0;
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
 
-        boolean[] isSeg = new boolean[s.length() + 1];
-        isSeg[0] = true;
-
-        for (int i = 0 ; i < s.length(); i ++) {
-            if (!isSeg[i]) continue;
-
-            for (String word: wordDict) {
-                int len = word.length();
-                int wordEnd = i + len;
-                if (wordEnd > s.length()) continue;
-                if (isSeg[wordEnd]) continue;
-
-                String substr = s.substring(i, wordEnd);
-                if (substr.equals(word)) {
-                    isSeg[wordEnd] = true; // make leet: "c" to be marked
+        // normal
+        for (int i = 1 ; i <= s.length(); i ++) {
+            for (int j = 0 ; j < i ; j ++) {
+                if (dp[j] && wordDict.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
                 }
             }
         }
-        return isSeg[s.length()];
+        return dp[s.length()];
     }
+
 
     public static void main(String[] args) {
         WordBreak ob = new WordBreak();
-        String word = "leetcode";
+        String word = "leetcodecode";
         Set<String> words = new HashSet<>();
-        words.add("leet");
-        words.add("code");
-
-        ob.wordBreak_1Dim(word, words);
+        HashMap<String, Object> runtimeParameters = new HashMap<>(null);
     }
 
 }

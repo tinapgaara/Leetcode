@@ -1,5 +1,6 @@
 package google.array;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -31,6 +32,7 @@ Expected:
 * */
 public class Flatten2DVector {
 
+    // Sol 1: using lists, listNo and curPos
     private List<List<Integer>> lists;
     private int listNo;
     private int curPos;
@@ -59,6 +61,40 @@ public class Flatten2DVector {
         }
         else
             return true;
+    }
+
+    // Sol2 : using queue<iterator> and current iterator
+    public class Vector2D implements Iterator<Integer> {
+
+        Queue<Iterator<Integer>> queue;
+        Iterator cur;
+        public Vector2D(List<List<Integer>> vec2d) {
+            queue = new LinkedList<Iterator<Integer>>();
+            for (List<Integer> list : vec2d) {
+                queue.offer(list.iterator());
+            }
+            cur = queue.poll();
+        }
+
+        @Override
+        public Integer next() {
+            if (hasNext()) {
+                return (Integer)(cur.next());
+            }
+            else
+                return -1;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (cur == null) return false;
+            // important !!! while
+            while (! cur.hasNext()) {
+                if (queue.isEmpty()) return false;
+                cur = queue.poll();
+            }
+            return true;
+        }
     }
 }
 
