@@ -22,27 +22,24 @@ import bloomberg.random.Random2ImpleRandom6;
 public class FindCelebrity {
 
     public int findCelebrity(int n) {
-        if (n == 0) return -1;
-        int candidate = 0;
-        for (int i = 1; i <n ; i++) {
-            // if ith does not know candidate, this means i could be candidate
-            // if i is not candidate, then while looping to a real candidate, i must know this, so must siwtch to the real celebrity
-            // so this must will find the real celebrity
-            if ( ! knows(i, candidate)) {
-                candidate = i;
+        int celebrityCandidate = 0;
+        for (int i = 0; i < n; i ++) {
+            if (! knows(i, celebrityCandidate)) {
+                celebrityCandidate = i;
             }
         }
-
-        // validate if this is celebrity
-        for ( int i = 0; i < n; i ++ ){
-            if ( i != candidate ){
-                if ( !knows ( i, candidate ) || knows ( candidate, i ))
+        for (int i = 0 ; i < n ; i ++) {
+            if (i != celebrityCandidate) {
+                if (knows(i, celebrityCandidate) && ! knows(celebrityCandidate, i)) {
+                    continue; // good candidate
+                }
+                else {
                     return -1;
+                }
             }
         }
-        return candidate;
+        return celebrityCandidate;
     }
-
     public boolean knows(int i, int j) {
         return false;
     }

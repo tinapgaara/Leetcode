@@ -14,8 +14,11 @@ How many possible unique paths are there?
 * */
 public class UniquePath {
 
+
     public int uniquePaths(int m, int n) {
         // How to achieve this in space O(n) ?
+        /* Two dim array
+        //dp[i][j] = dp[i-1][j] + dp[i][j-1]
         int[][] uniqueNums = new int[m][n];
         for (int i = 0 ; i < m; i ++) {
             uniqueNums[i][0] = 1;
@@ -29,10 +32,20 @@ public class UniquePath {
             }
         }
         return uniqueNums[m-1][n-1];
+        */
+        // Since dp[i][j] = dp[i-1][j] + dp[i][j-1], satisfy: dp[i][x] = dp[i-1][x] + dp[i][y] and y < x, we can simplify this to
+        // dp[j] = dp[j] + dp[j-1]
+        int[] dp = new int[n];
+        for (int i = 0; i < m; i ++) {
+            dp[0] = 1;
+            for (int j = 1; j < n; j ++) {
+                dp[j] = dp[j] + dp[j-1];
+            }
+        }
+        return dp[n-1];
     }
 
     // use only one row and one col
-
     public int uniquePaths_rollingRows(int m, int n) {
         int[] rowDp = new int[n];
         int[] colDp = new int[m];

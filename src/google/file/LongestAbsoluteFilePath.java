@@ -70,4 +70,9 @@ public class LongestAbsoluteFilePath {
         }
         return res;
     }
+
+    public static void main(String[] args) {
+        LongestAbsoluteFilePath ob = new LongestAbsoluteFilePath();
+        ob.lengthLongestPath("dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext");
+    }
 }

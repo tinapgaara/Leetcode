@@ -21,39 +21,30 @@ import java.util.PriorityQueue;
  You may assume k is always valid, 1 ≤ k ≤ array's length.
  */
 public class FindKLargestElement {
-    public class QueueComparator implements Comparator<Integer> {
-        @Override
-        public int compare(Integer i1, Integer i2) {
-            return i2.intValue() - i1.intValue();
-        }
-    }
-
     public int findKthLargest_queue(int[] nums, int k) {
         if (nums == null || nums.length == 0) return 0;
-        QueueComparator comparator = new QueueComparator();
-        PriorityQueue<Integer> queue = new PriorityQueue<Integer>(comparator);
+        PriorityQueue<Integer> queue = new PriorityQueue<Integer>();
         for (int i = 0 ; i < nums.length; i ++) {
             queue.offer(nums[i]);
+            if (queue.size() > k) {
+                queue.poll();
+            }
         }
-        for (int i = 0 ; i < k -1 ; i ++) {
-            queue.poll();// o(logn)
-        }
-        return queue.poll();
+        return queue.peek();
     }
-
     // Solution 2:  bubble sort
-    public int findKthLargest(int[] nums, int k) {
+    public int findKthLargest_bubble(int[] nums, int k) {
         if (nums == null || nums.length == 0) return 0;
-        // o(nk) no space in place
         for (int i = 0 ; i < k; i ++) {
-            for (int j = i + 1; j < nums.length; j ++) {
-                if (nums[i] < nums[j]) {
-                    int tmp = nums[i];
-                    nums[i] = nums[j];
-                    nums[j] = tmp;
+            // swap the largest element to the end
+            for (int j = 1 ; j < nums.length - i; j ++) {
+                if (nums[j] < nums[j - 1]) {
+                    int tmp = nums[j];
+                    nums[j] = nums[j-1];
+                    nums[j-1] = tmp;
                 }
             }
         }
-        return nums[k-1];
+        return nums[nums.length - k];
     }
 }

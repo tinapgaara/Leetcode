@@ -1,5 +1,6 @@
 package square;
 
+import google.heapPriorityQueue.MinMeetingRoom;
 import interval.Interval;
 
 import java.util.*;
@@ -19,7 +20,7 @@ import java.util.*;
  */
 public class MinMeetingRoomII {
 
-    // given k people have n intervals, find common overlapped intervals ????
+    // given k people have n intervals, find common overlapped intervals
 
     // busy intervals -> try to find free intervals
     public List<Interval> findMeetingIntervals(Interval[] i1, Interval[] i2) {
@@ -47,15 +48,20 @@ public class MinMeetingRoomII {
 
         IntervalComparator comparator = new IntervalComparator();
         Arrays.sort(intervals, comparator);
-        Queue<Integer> queue = new PriorityQueue<Integer>();
-        queue.offer(0);
-        for (Interval i : intervals) {
-            if (i.start >= queue.peek()) {
+        int max = 0;
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        for (Interval interval : intervals) {
+            int start = interval.start;
+            int end = interval.end;
+            max = Math.max(max, queue.size());
+            while(! queue.isEmpty() && start >= queue.peek()) {
                 queue.poll();
             }
-            queue.offer(i.end);
+            queue.offer(end);
+
         }
-        return queue.size();
+        max = Math.max(max, queue.size());
+        return max;
     }
 
     public class IntervalComparator implements Comparator<Interval> {
@@ -68,5 +74,14 @@ public class MinMeetingRoomII {
                 return i1.end - i2.end;
             }
         }
+    }
+
+    public static void main(String[] args) {
+        MinMeetingRoomII ob = new MinMeetingRoomII();
+        Interval i1 = new Interval(1,17);
+        Interval i2 = new Interval(7,10);
+        Interval i3 = new Interval(12,14);
+        Interval[] is = {i1 ,i2, i3};
+        ob.minMeetingRooms(is);
     }
 }

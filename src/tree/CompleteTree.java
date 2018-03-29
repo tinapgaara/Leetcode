@@ -4,88 +4,74 @@ import apple.laf.JRSUIUtils;
 
 /**
  * Created by yingtan on 9/1/15.
+ *
+ * The idea to check complete binary tree is simple. We do a usual level order traversal and
+ * whenever we see that there is a node which does not have both left and right child, then we set
+ * nonFullNodeSeen = true. This indicates that while doing level order traversal,
+ * we have seen our first node with either right or left or both children absent.
+ * And for a complete binary tree, all the nodes visited during level order traversal after
+ * visiting a nonFullNode would be leaf nodes. If this is not true, we return false.
+ * For example, in the left-hand side complete tree shown above, once we visit node '3' which is a nonFullNode, the nodes visited after this node are node '4','5' and '6' all of which are leaf nodes.
+
  */
+import java.util.*;
 public class CompleteTree {
-
-    /* Solution 1: exceed limit
-    public int countNodes(TreeNode root) {
-        if (root == null) {
-            return 0;
+    // bfs, once hit a node which is a not a full node, the rest of nodes are not full nodes as well.  time : o(n) , space: o(n)
+    public boolean isComplete(TreeNode root) {
+        if (root == null) return true;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        boolean isNotFull = false;
+        while(! queue.isEmpty()) {
+            TreeNode cur = queue.poll();
+            // if we already seen a not full node before, this one must be leaf
+            if (isNotFull) {
+                // not a leave
+                if (cur.left != null || cur.right != null) {
+                    return false;
+                }
+            }
+            // if left is null but right is not null, can't be a complete tree
+            if (cur.left == null && cur.right != null) {
+                return false;
+            }
+            if (cur.left != null) {
+                queue.offer(cur.left);
+            }
+            else {
+                isNotFull = true;
+            }
+            if (cur.right != null) {
+                queue.offer(cur.right);
+            }
+            else {
+                isNotFull = true;
+            }
         }
-        int leftHeight = calLeftHeight(root);
-        int rightHeight = calRightHeight(root);
-        System.out.println(leftHeight);
-        System.out.println(rightHeight);
-        if (leftHeight == rightHeight) {
-            return (int)(Math.pow(2, leftHeight) - 1);
-        }
-        else {
-            return recurCountNodes(root);
-        }
+        return true;
     }
 
-    public int calLeftHeight(TreeNode root) {
-        if (root == null) {
-            return 0;
+    public boolean isCompleteRecur(TreeNode root, int start, int n) {
+        if (root == null) return true;
+        if (root.left != null) {
+            int leftnode = 2 * start + 1;
+            if (leftnode < n) {
+                return isCompleteRecur(root.left, leftnode, n);
+            }
+            else {
+                return false;
+            }
         }
-
-        return calLeftHeight(root.left) + 1;
+        if (root.right != null) {
+            int rightnode = 2 * start + 2;
+            if (rightnode < n) {
+                return isCompleteRecur(root.right, rightnode, n);
+            }
+            else {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public int calRightHeight(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-
-        return calRightHeight(root.right) + 1;
-    }
-
-    public int recurCountNodes(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-        return recurCountNodes(root.left) + 1 + recurCountNodes(root.right);
-    }
-    */
-
-    // Solution 2: exceed time limit
-    public int countNodes(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-
-        TreeNode cur = root;
-        int leftHeight = 0;
-        int rightHeight = 0;
-        while(cur != null) {
-            leftHeight ++;
-            cur = cur.left;
-        }
-        cur = root;
-        while(cur != null) {
-            rightHeight ++;
-            cur = cur.right;
-        }
-
-        System.out.println("l:"+leftHeight);
-        System.out.println("r:"+rightHeight);
-        if (leftHeight == rightHeight) {
-            return (int)(Math.pow(2,leftHeight) - 1);
-        }
-        else {
-            return countNodes(root.left) + countNodes(root.right) + 1;
-        }
-    }
-
-    public static void main(String[] args) {
-        TreeNode root = new TreeNode(1);
-        TreeNode l = new TreeNode(2);
-        TreeNode r = new TreeNode(3);
-        root.left = l;
-        root.right = r;
-        TreeNode ll = new TreeNode(4);
-        l.left = ll;
-        CompleteTree ob = new CompleteTree();
-        System.out.println(ob.countNodes(root));
-    }
 }

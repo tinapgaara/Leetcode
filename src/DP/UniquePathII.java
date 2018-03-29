@@ -29,7 +29,7 @@ public class UniquePathII {
     public int uniquePathsWithObstacles_1(int[][] obstacleGrid) {
         int len = obstacleGrid[0].length;
         int[] dp = new int[len];
-        dp[0] = 1;
+        dp[0] = 1; // important !!!!
         for (int i = 0 ; i < obstacleGrid.length; i ++) {
             for (int j = 0 ; j < len; j ++) {
                 if (obstacleGrid[i][j] == 1) {

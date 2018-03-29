@@ -23,23 +23,21 @@ import java.util.Random;
 public class FirstBadVersion {
 
     public int firstBadVersion(int n) {
-
-        int low = 0;
-        int high = n;
-        int first = 0;
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            if (isBadVersion(mid)) {
-                first = mid;
-                high = mid -1;
+        long low = 1;
+        long high = n;
+        while(((long)(low + 1)) < (long)high) {
+            long mid = low + (high - low) / 2;
+            if (isBadVersion((int)mid)) {
+                high = mid;
             }
             else {
                 low = mid + 1;
             }
         }
-        return first;
+        if (isBadVersion((int)low)) return (int)low;
+        else if (isBadVersion((int)high)) return (int)high;
+        return -1;
     }
-
     public boolean isBadVersion(int num) {
         Random rn = new Random();
         return rn.nextBoolean();

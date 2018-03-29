@@ -128,7 +128,7 @@ public class BasicCalculator {
 
     public static void main(String[] args) {
         BasicCalculator ob = new BasicCalculator();
-        System.out.println(ob.calculate_easy("(1+(4+5+2-4)+12-3)+(6+8)"));
+        System.out.println(ob.calculate_easy("1+1"));
     }
 
 }

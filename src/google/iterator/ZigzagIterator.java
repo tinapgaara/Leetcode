@@ -2,6 +2,7 @@ package google.iterator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -30,108 +31,30 @@ It should return [1,4,8,2,5,9,3,6,7].
 
 public class ZigzagIterator {
 
-    List<Integer> v1;
-    List<Integer> v2;
-    int i;
-    int j;
-    int listId = 1;
+    Iterator<Integer> i1;
+    Iterator<Integer> i2;
+    int count = -1;
 
     public ZigzagIterator(List<Integer> v1, List<Integer> v2) {
-        this.v1 = v1;
-        this.v2 = v2;
-        i = 0;
-        j = 0;
-
+        this.i1 = v1.iterator();
+        this.i2 = v2.iterator();
     }
 
     public int next() {
-        int res = -1;
-        if (i >= v1.size()) {
-            res = v2.get(j);
-            j ++;
+        count ++;
+        if ((count % 2 == 0 && i1.hasNext()) ||
+                (! i2.hasNext())){
+            return i1.next();
         }
-        else if (j >= v2.size()) {
-            res = v1.get(i);
-            i ++;
+        else if ((count % 2 == 1 && i2.hasNext()) ||
+                (! i1.hasNext())){
+            return i2.next();
         }
-        else {
-            if (listId == 1) {
-                res = v1.get(i);
-                i ++;
-                listId = 2;
-            }
-            else {
-                res = v2.get(j);
-                j ++;
-                listId = 1;
-            }
-        }
-        return res;
+        return -1;
     }
 
 
     public boolean hasNext() {
-        return (i < v1.size() || j < v2.size());
+        return (i1.hasNext() || i2.hasNext());
     }
-
-    /*
-    private List<List<Integer>> lists;
-    private int pos;
-    private int listNo;
-
-    public ZigzagIterator(List<Integer> v1, List<Integer> v2) {
-        pos = 0;
-        listNo = 0;
-        lists = new ArrayList<>();
-        lists.add(v1);
-        lists.add(v2);
-
-        // jump to the list which is not a empty list
-        while ((listNo < lists.size()) && (pos >= lists.get(listNo).size())) {
-            listNo ++;
-            pos = 0;
-
-        }
-    }
-
-    public int next() {
-        int res = lists.get(listNo).get(pos);
-
-        listNo ++;
-
-        int maxCount = lists.size();
-        int count = 0;
-
-        while (((listNo >= lists.size()) || (pos >= lists.get(listNo).size())) && (count < maxCount)) {
-            if (listNo >= lists.size()) {
-                listNo = 0;
-                pos ++;
-            }
-            else {
-                listNo ++;
-            }
-            count ++;
-        }
-        return res;
-    }
-
-    public boolean hasNext() {
-        if ((listNo < lists.size()) && (pos < lists.get(listNo).size()))
-            return true;
-        else
-            return false;
-    }
-
-    public static void main(String[] args) {
-
-        List<Integer> list1 = Arrays.asList(1,2);
-        List<Integer> list2 = Arrays.asList(3, 4, 5, 6);
-
-        ZigzagIterator iter = new ZigzagIterator(list1, list2);
-        while (iter.hasNext()) {
-            System.out.println(iter.next());
-        }
-
-    }
-    */
 }

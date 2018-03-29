@@ -2,13 +2,52 @@ package google.interval;
 
 import interval.Interval;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 
 /**
  * Created by yingtan on 11/26/15.
+ * http://www.zrzahid.com/maximum-number-of-overlapping-intervals/
+ *
+ * Given a set of intervals, how do we find the maximum number of intervals overlapping
+ * at any point of time.
  */
 public class MostFrequentOverlapInterval {
+
+    private List<Interval> maxOverLapIntervals(Interval[] intervals) {
+        IntervalComparator comparator = new IntervalComparator();
+        Arrays.sort(intervals, comparator);
+        // sort intervals
+
+        int max = 0;
+        List<Interval> res = new ArrayList<>();
+        // min heap
+        PriorityQueue<Interval> queue = new PriorityQueue<>(new IntervalQueueComparator());
+        for (Interval interval : intervals) {
+            int start = interval.start;
+            //int end = interval.end;
+
+            if (! queue.isEmpty() && start > queue.peek().end) {
+                // all intervals in queue are overlapped
+                int size = queue.size();
+                if (size > max) {
+                    max = size;
+                    res = new ArrayList<>();
+                    List<Interval> tmp = new ArrayList<>();
+                    while(! queue.isEmpty()) {
+                        Interval i = queue.poll();
+                        tmp.add(i);
+                        res.add(i);
+                    }
+                    // push intervals back to queue
+                    for (int i = 0 ; i < tmp.size(); i ++) {
+                        if (tmp.get(i).end >= start) queue.offer(tmp.get(i));
+                    }
+                }
+            }
+            queue.offer(interval);
+        }
+        return res;
+    }
 
     public Interval overLap(Interval[] intervals) {
 
@@ -93,6 +132,18 @@ public class MostFrequentOverlapInterval {
         }
     }
 
+    public class IntervalQueueComparator implements Comparator<Interval> {
+        @Override
+        public int compare(Interval i1, Interval i2) {
+            if (i1.end < i2.end) {
+                    return -1;
+                }
+                else {
+                    return 1;
+                }
+        }
+    }
+
     public static void main(String[] args) {
         Interval i1 = new Interval(0,10);
         Interval i2 = new Interval(5,7);
@@ -101,9 +152,13 @@ public class MostFrequentOverlapInterval {
         Interval i5 = new Interval(9,10);
         Interval i6 = new Interval(5,8);
 
-        Interval[] is = new Interval[]{i1,i2,i3,i4,i5};
+        Interval[] is = new Interval[]{i1,i2,i3,i4,i5, i6};
         MostFrequentOverlapInterval ob =new MostFrequentOverlapInterval();
         Interval i = ob.overLap(is);
-        System.out.println(i.start + " ," + i.end);
+        List<Interval> res = ob.maxOverLapIntervals(is);
+        for (Interval ii : res) {
+            System.out.println(ii.start + "," + ii.end);
+        }
+        System.out.println();
     }
 }

@@ -29,22 +29,25 @@ package facebook.bit;
 public class TotalHammingDistance {
     public int totalHammingDistance(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
-        int res = 0;
+        int count = 0;
         for (int i = 0 ; i < 32; i ++) {
-            int numzeros = 0;
-            int numones = 0;
-            for (int j = 0 ; j < nums.length; j ++) {
-                int digit = nums[j] & 1;
-                if (digit == 0) numzeros ++;
-                else numones ++;
-
-                //System.out.println(nums[j]+ ":" + numzeros + "," + numones);
-
-                nums[j] = (nums[j] >> 1);
+            // each bit from lower to higher
+            int zeroCount = 0;
+            int oneCount = 0;
+            for (int j = 0; j < nums.length; j ++) {
+                int num = nums[j];
+                int lowestBit = (num) & 1; // using i here
+                if (lowestBit == 1) {
+                    oneCount ++;
+                }
+                else {
+                    zeroCount ++;
+                }
+                nums[j] = nums[j] >> 1;
             }
-            res = res + numzeros * numones;
+            count = count + zeroCount * oneCount;
         }
-        return res;
+        return count;
     }
 
 }

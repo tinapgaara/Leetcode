@@ -6,72 +6,104 @@ import java.util.*;
 
 /**
  * Created by yingtan on 11/8/15.
+ *
+ * 126. Word Ladder II
+ DescriptionHintsSubmissionsDiscussSolution
+ Discuss Pick One
+ Given two words (beginWord and endWord), and a dictionary's word list, find all shortest transformation sequence(s) from beginWord to endWord, such that:
+
+ Only one letter can be changed at a time
+ Each transformed word must exist in the word list. Note that beginWord is not a transformed word.
+ For example,
+
+ Given:
+ beginWord = "hit"
+ endWord = "cog"
+ wordList = ["hot","dot","dog","lot","log","cog"]
+
  */
 public class WordLadderII {
 
-    // jiuzhang algor
     public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
         // distance from current node to startWord
-        Map<String, Integer> distance = new HashMap<String, Integer>();
-        Map<String, List<String>> graph = new HashMap<String, List<String>>();
-        List<List<String>> res = new ArrayList<List<String>>();
-        if (! wordList.contains(endWord)) return res;
-        wordList.add(beginWord);
-        wordList.add(endWord);
-
-        bfs(beginWord, endWord, wordList, distance, graph);
-
-        List<String> path = new ArrayList<String>();
+        Map<String, Integer> distance = new HashMap<>();
+        Map<String, Set<String>> graph = new HashMap<>();
+        List<List<String>> res = new ArrayList<>();
+        Set<String> wordSet = new HashSet<>();
+        for(String word : wordList) {
+            wordSet.add(word);
+        }
+        bfs(graph, beginWord, endWord, distance, wordSet);
+        List<String> path = new ArrayList<>();
         path.add(endWord);
-        dfs(endWord, beginWord, distance, graph, path, res);
+        dfs2(beginWord, endWord, distance, graph, path, res);
         return res;
     }
-    private void bfs(String beginWord, String endWord, List<String> wordList,
-                     Map<String, Integer> distance, Map<String, List<String>> graph) {
+    // build a graph starting with beginWord, ends with endWord, with shortest path bewteen these two words
+    private void bfs(Map<String, Set<String>> graph, String beginWord, String endWord,
+                     Map<String, Integer> distance, Set<String> wordSet) {
         Queue<String> queue = new LinkedList<String>();
         queue.offer(beginWord);
         distance.put(beginWord, 0);
-        for (String s: wordList) {
-            graph.put(s, new ArrayList<String>());
+        // init graph
+        for (String s: wordSet) {
+            graph.put(s, new HashSet<String>());
         }
         while(! queue.isEmpty()) {
             String cur = queue.poll();
             int dist = distance.get(cur);
+            /* can not judge equals endWord here
+             be may have multiple node points to endWord
 
-            List<String> neighbors = expand(cur, wordList);
+            if (cur.equals(endWord)) {
+                // record the shortest distance from startword t endword
+                // if calculated before, then, this is must a longer path, no need to record
+                if (! distance.containsKey(endWord) || distance.get(endWord) == dist) {
+                    distance.put(endWord, dist);
+                    graph.get(endWord).add(cur);
+                }
+                continue;
+            }
+            */
+            List<String> neighbors = findNext(cur, wordSet);
             for (String neighbor : neighbors) {
+                // important !!! must put this before judge vist or not
+                // no matter what, create the edge
+                // for
+                // 1 <-- 2
+                // 1 <-- 3
                 graph.get(neighbor).add(cur);
-                // important !!! if not vis
-                // if vis, then this is re-vis, and this is must have longer distance
+                // not visited before, then we add record dist and put that to queue
                 if(! distance.containsKey(neighbor)) {
+
                     distance.put(neighbor, dist + 1);
                     queue.offer(neighbor);
                 }
             }
         }
     }
-
-    private void dfs(String cur, String startWord, Map<String, Integer> distance, Map<String, List<String>> graph,
-                     List<String> path, List<List<String>> res) {
-        // base case, stop sign
-        if (cur.equals(startWord)) {
-            Collections.reverse(path);
-            res.add(new ArrayList<String>(path));
-            Collections.reverse(path);
+    private void dfs2(String destWord, String cur, Map<String, Integer> distance, Map<String, Set<String>> graph,
+                      List<String> path, List<List<String>> res) {
+        if (cur.equals(destWord)) {
+            List<String> copyPath = new ArrayList<>(path);
+            Collections.reverse(copyPath);
+            res.add(copyPath);
+            return;
         }
-        else {
-            for (String neighbor : graph.get(cur)) {
-                // the current word's dist to the start point is stored in distance, if the current word's dist to start point
-                // is 5,then, we need to dfs the word whose dist to the start point is 4 ( 5 - 1)
-                if (distance.containsKey(cur) && distance.get(cur) - 1 == distance.get(neighbor)) {
+        Set<String> neighbors = graph.get(cur);
+        if (neighbors != null) {
+            for (String neighbor : neighbors) {
+                // make sure this is the shortest path
+                if (distance.containsKey(neighbor) && distance.get(neighbor) + 1 == distance.get(cur)) {
                     path.add(neighbor);
-                    dfs(neighbor, startWord, distance, graph, path, res);
+                    dfs2(destWord, neighbor, distance, graph, path, res);
                     path.remove(path.size() - 1);
                 }
             }
         }
     }
-    private List<String> expand(String cur, List<String> wordList) {
+
+    private List<String> findNext(String cur, Set<String> wordSet) {
         List<String> res = new ArrayList<String>();
         for (int i = 0 ; i < cur.length(); i ++) {
             char[] chs = cur.toCharArray();
@@ -80,9 +112,10 @@ public class WordLadderII {
                 if (chs[i] != (char)j) {
                     chs[i] = (char)j;
                     String newWord = new String(chs);
-                    if (wordList.contains(newWord)) {
+                    if (wordSet.contains(newWord)) {
                         res.add(newWord);
                     }
+                    // revert back
                     chs[i] = ch;
                 }
             }
@@ -164,8 +197,9 @@ public class WordLadderII {
         String end = "cog";
         Set<String> word = new HashSet<>(Arrays.asList("ted","tex","red","tax","tad","den","rex","pee"));
         List<String> words = new ArrayList<>(Arrays.asList("hot","dot","dog","lot","log"));
-
-        System.out.println(ob.findLadders(begin, end, words));
+        List<String> wordss = new ArrayList<>(Arrays.asList("hot","dot","dog","lot","log","cog"));
+        System.out.println(ob.findLadders(begin, end, wordss));
+        System.out.println(ob.findLadders(begin, end, wordss));
     }
 
 }

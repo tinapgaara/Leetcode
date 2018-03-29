@@ -18,7 +18,8 @@ public class SearchForARange {
         return res;
     }
     // ologn because of sorted array
-    // if we need to find the element which is equals to target, we must use, (0, len-1), while(low<=high), and use equals to judge
+    // if we need to find the element which is equals to target,
+    // we must use, (0, len-1), while(low<=high), and use equals to judge
     //  find the first element which is equals to the target
     private int findFirstEquals(int[] nums, int target){
         int start = 0;

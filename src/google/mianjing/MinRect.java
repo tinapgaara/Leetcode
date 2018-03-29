@@ -11,7 +11,6 @@ import java.util.List;
  * 二维坐标系给一堆点，找出这些点能形成的最小矩形的面积
  */
 public class MinRect {
-
     public class Point implements Comparable {
         public float m_x, m_y;
 
@@ -22,7 +21,6 @@ public class MinRect {
             else return +1;
         }
     }
-
     public class Rect {
         public Point m_leftTop, m_rightBottom;
         public Rect(Point leftTop, Point rightBottom) {
@@ -33,7 +31,6 @@ public class MinRect {
             return (m_rightBottom.m_x - m_leftTop.m_x) * (m_leftTop.m_y - m_rightBottom.m_y);
         }
     }
-
     public Rect calcMinRect(List<Point> pointList) {
         // 将矩阵按照 x 从小到大，y从大到小 的顺序排序
         Point[] pointArr = new Point[pointList.size()];

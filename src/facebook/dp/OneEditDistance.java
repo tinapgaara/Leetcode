@@ -14,34 +14,31 @@ package facebook.dp;
 public class OneEditDistance {
 
     public boolean isOneEditDistance(String s, String t) {
-        if (s == null || t == null ) return false;
-        int sLen = s.length();
-        int tLen = t.length();
-
-        int minLoop = Math.min(sLen, tLen);
-        for (int i = 0 ; i < minLoop; i ++) {
+        if (s == null || t == null) return false;
+        int min = Math.min(s.length(), t.length());
+        for (int i = 0 ; i < min; i ++) {
             if (s.charAt(i) != t.charAt(i)) {
-                if (sLen == tLen) {
-                    String laterSStr = s.substring(i+1, sLen);
-                    String laterTStr = t.substring(i+1, tLen);
-                    if (laterSStr.equals(laterTStr)) return true;
-                    else return false;
+                if (s.length() == t.length()) {
+                    // this is replace
+                    return s.substring(i + 1).equals(t.substring( i + 1));
                 }
-                else if (sLen > tLen){
-                    String laterSStr = s.substring(i+1, sLen);
-                    String laterTStr = t.substring(i, tLen);
-                    if (laterSStr.equals(laterTStr)) return true;
-                    else return false;
+                else if (s.length() > t.length()) {
+                    // delete char from s
+                    return s.substring(i + 1).equals(t.substring(i));
                 }
                 else {
-                    String laterSStr = s.substring(i, sLen);
-                    String laterTStr = t.substring(i+1, tLen);
-                    if (laterSStr.equals(laterTStr)) return true;
-                    else return false;
+                    // delete a char from t
+                    return t.substring(i + 1).equals(s.substring(i));
                 }
             }
         }
-        if ( (sLen - tLen == 1) || (tLen - sLen == 1) ) return true;
-        else return false;
+        int absDist = Math.abs(s.length() - t.length());
+        if (absDist != 1) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
+
 }

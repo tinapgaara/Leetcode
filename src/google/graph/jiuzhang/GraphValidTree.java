@@ -12,7 +12,7 @@ public class GraphValidTree {
         if (n == 0) {
             return false;
         }
-        // Important !!!! judge circle ....
+        // Important !!!! undirected graph check circle ....
         if (edges.length != n - 1) {
             return false;
         }

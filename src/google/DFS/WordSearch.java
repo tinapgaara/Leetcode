@@ -38,6 +38,36 @@ public class WordSearch {
         return false;
     }
 
+    private boolean DFS2(char[][] board, int i, int j, String word, int index) {
+        if (index == word.length()) return true;
+
+        if (i >= 0 && i < board.length && j >= 0 && j < board[0].length) {
+            if (board[i][j] == word.charAt(index)) {
+                char tmp = board[i][j];
+                board[i][j] = '#'; // mark as visited
+                int[][] dirs = {{0,1}, {0,-1},{1,0}, {-1,0}};
+
+                for (int[] dir : dirs) {
+                    int newx = i + dir[0];
+                    int newy = j + dir[1];
+                    if (DFS2(board, newx, newy, word, index + 1)) {
+                        return true;
+                    }
+                }
+                // mark as before
+                board[i][j] = tmp;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
     public boolean DFS(char[][] board, int i, int j, String word, int index) {
         if (index > word.length() -1) return true;
         char ch = word.charAt(index);

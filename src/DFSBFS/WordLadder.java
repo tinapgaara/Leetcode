@@ -27,86 +27,41 @@ import java.util.Set;
 
     Shortest transformation: using BFS property.
 * */
+    import  java.util.*;
 public class WordLadder {
 
-    public class Node {
-        String mNodeStr;
-        int mDist;
-
-        public Node(String nodeStr, int dist) {
-            mNodeStr = nodeStr;
-            mDist = dist;
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if (beginWord == null || beginWord.length() == 0 || endWord == null || endWord.length() == 0 || wordList == null || wordList.size() == 0) {
+            return 0;
         }
-    }
-
-    // Solution 1: using shortest path in BFS
-    public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
-
-        Queue<Node> queue = new LinkedList<Node>();
-        queue.offer(new Node(beginWord, 1));
-
-        while ( ! queue.isEmpty()) {
-            Node node = queue.poll();
-            String word = node.mNodeStr;// we
-            int dist = node.mDist;
-
-            for (int i = 0 ; i < word.length() ; i ++) { // neighbors: ae, be, ce, ..... wz
-                char[] chs = word.toCharArray();
-                for (int j = 'a' ; j < 'z'; j ++) {
-                    chs[i] = (char)j;
-                    String newstr = new String(chs);
-
-                    if (newstr.equals(endWord)) return dist+1;
-
-                    if (wordList.contains(newstr)) { // judge if is WHITE
-                        queue.offer(new Node(newstr, dist + 1));
-                        wordList.remove(newstr); // change its color to BLACK
-                    }
-                }
-            }
-        }
-        return 0;
-    }
-
-    // Solution 2: do not need to declare Node, can just use another dist Queue.
-    public int ladderLength_2(String beginWord, String endWord, Set<String> wordList) {
-        if (beginWord == null || endWord == null || wordList == null) return 0;
         Queue<String> words = new LinkedList<String>();
         Queue<Integer> dist = new LinkedList<Integer>();
-        dist.offer(1);
         words.offer(beginWord);
-
         Set<String> wordSet = new HashSet<String>();
-        for (String w : wordList) {
-            wordSet.add(w);
-        }
-
-        while(!words.isEmpty()) {
-            String word = words.poll();
+        wordSet.addAll(wordList);
+        dist.offer(0);
+        while(! words.isEmpty()) {
+            String curWord = words.poll();
             int dis = dist.poll();
-            int len = word.length();
-
-            for(int i = 0 ; i < len; i ++) {
-                char[] chs = word.toCharArray();
-                for (int k = 'a'; k < 'z' ; k ++) {
-                    chs[i] = (char)k;
-
-                    String newstr = new String(chs);
-
-                    if (wordSet.contains(newstr)) {
-                        if (newstr.equals(endWord)) {
-                            return dis + 1;
-                        }
-                        words.offer(newstr);
-                        wordSet.remove(newstr);
-
-                        dist.offer(dis+1);
+            if (curWord.equals(endWord)) {
+                return dis + 1;
+            }
+            for (int i = 0; i < curWord.length(); i ++) {
+                char[] chs = curWord.toCharArray();
+                for (char c = 'a'; c <= 'z'; c ++) {
+                    chs[i] = c;
+                    String newWord = new String(chs);
+                    if (wordSet.contains(newWord)) {
+                        words.offer(newWord);
+                        dist.offer(dis + 1);
+                        // important!!!  replace the visited flag array, make sure the same word will not be added to the queue multiple time,
+                        // and the first time we hit this word, must is the shortest distance. don't need to add this word back to dict
+                        wordSet.remove(newWord);
                     }
                 }
             }
         }
         return 0;
     }
-
 }
 

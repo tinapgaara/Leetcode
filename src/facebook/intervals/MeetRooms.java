@@ -3,6 +3,7 @@ package facebook.intervals;
 import interval.Interval;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 
 /**
@@ -25,34 +26,31 @@ public class MeetRooms {
 
     public boolean canAttendMeetings(Interval[] intervals) {
         if (intervals == null || intervals.length == 0) return true;
-
-        IntervalComparator comparator = new IntervalComparator();
-        Arrays.sort(intervals, comparator);
-        Interval prev = null;
-        for (int i = 0 ; i < intervals.length; i ++) {
-            Interval cur = intervals[i];
-            if (overlap(prev, cur)) {
+        IntervalComparator comp = new IntervalComparator();
+        Arrays.sort(intervals, comp);
+        for (int i = 1; i < intervals.length; i ++) {
+            if (overlap(intervals[i-1], intervals[i])) {
                 return false;
             }
-            prev = cur;
         }
         return true;
     }
-
     public class IntervalComparator implements Comparator<Interval> {
         public int compare(Interval i1, Interval i2) {
-            if (i1.start != i2.start) {
-                return (i1.start - i2.start);
+            if (i1.start == i2.start) {
+                return i1.end - i2.end;
             }
             else {
-                return (i1.end - i2.end);
+                return i1.start - i2.start;
             }
         }
     }
-
     public boolean overlap(Interval i1, Interval i2) {
-        if (i1 == null) return false;
-        if ( (i1.start < i2.end) && (i2.start < i1.end) ) return true;
-        else return false;
+        if (i1.start < i2.end && i2.start < i1.end) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

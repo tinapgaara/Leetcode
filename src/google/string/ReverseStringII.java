@@ -36,4 +36,36 @@ public class ReverseStringII {
             end --;
         }
     }
+
+    public String reverseStr_2(String s, int k) {
+        if (s == null || s.length() == 0) {
+            return s;
+        }
+
+        StringBuilder str = new StringBuilder();
+        int len = s.length();
+        int i = 0;
+        while(i < len) {
+            int end = i + k * 2 - 1;
+            int minEnd = Math.min(end, len - 1);
+            int mid = i + k - 1;
+            //If there are less than 2k but greater than or equal to k characters, then reverse the first k characters and left the other as origina
+            if (mid < len) {
+                for (int j = mid; j >= i; j --) {
+                    str.append(s.charAt(j));
+                }
+                for (int j = mid + 1; j <= minEnd; j ++) {
+                    str.append(s.charAt(j));
+                }
+            }
+            else {
+                for (int j = len -1; j >= i; j --) { //if there are less than k characters left, reverse all of them
+                    str.append(s.charAt(j));
+                }
+            }
+            i = end + 1;
+        }
+        return str.toString();
+    }
 }
+

@@ -9,7 +9,7 @@ import java.util.Stack;
 /**
  * Created by yingtan on 10/29/17.
  *
- * 145. Binary Tree Postorder Traversal
+ * 145. Binary Tree Postorder BinaryTreeVerticalOrderTraversal
  DescriptionHintsSubmissionsDiscussSolution
  Discuss Pick One
  Given a binary tree, return the postorder traversal of its nodes' values.

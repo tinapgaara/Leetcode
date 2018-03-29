@@ -19,53 +19,25 @@ import linkedlist.ListNode;
 public class PalindromLinkedList {
 
     public boolean isPalindrome(ListNode head) {
-        if (head == null) return true;
         ListNode slow = head;
         ListNode fast = head;
-        ListNode slowPrev = null;
-
-        while (fast != null && fast.next != null) {
-            slowPrev = slow;
+        while(slow != null && fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
-
-        if(slowPrev == null) {
-            // only one node
-            return true;
-        }
-        slowPrev.next = null;
-
-        ListNode secondList = null;
-        if (fast == null) {
-            // even number
-            secondList = slow;
-        }
-        else {
-            // odd number
-            secondList = slow.next;
-        }
-
-        secondList = reverse(secondList);
-
-        ListNode newHead = head;
-
-        ListNode newSecondHead = secondList;
-        while (newHead != null && newSecondHead != null) {
-            if (newHead.val != newSecondHead.val) return false;
-            newHead = newHead.next;
-            newSecondHead = newSecondHead.next;
+        slow = reverse(slow);
+        ListNode cur = head;
+        while(slow != null && cur != null) {
+            if (slow.val != cur.val) return false;
+            slow = slow.next;
+            cur = cur.next;
         }
         return true;
     }
-
-    public ListNode reverse(ListNode list) {
+    public ListNode reverse(ListNode cur) {
         ListNode prev = null;
-        ListNode cur = list;
-        ListNode next = null;
-
-        while (cur != null) {
-            next =  cur.next;
+        while(cur != null) {
+            ListNode next = cur.next;
             cur.next = prev;
             prev = cur;
             cur = next;

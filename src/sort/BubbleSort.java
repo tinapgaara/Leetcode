@@ -15,6 +15,7 @@ public class BubbleSort {
         int n = arr.length;
         // change this loop to k times, then could find out top k
         for (int i = 0; i < n-1; i++)
+            // each time put max value to the right place
             for (int j = 0; j < n-i-1; j++)
                 if (arr[j] > arr[j+1])
                 {

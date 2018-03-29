@@ -56,40 +56,24 @@ public class Subset {
         return res;
     }
 
-    // Use recursion: slow
     public List<List<Integer>> subsets(int[] nums) {
-        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        List<List<Integer>> res = new ArrayList<>();
         if (nums == null || nums.length == 0) return res;
-        Arrays.sort(nums);
-
-        return recurSubsets(nums, 0);
-    }
-
-    public List<List<Integer>> recurSubsets(int[] nums, int cur) {
-        List<List<Integer>> res = new ArrayList<List<Integer>>();
-        if (cur == nums.length - 1) {
-            List<Integer> self = new ArrayList<Integer>();
-            self.add(nums[cur]);
-
-            List<Integer> empty = new ArrayList<Integer>();
-
-            res.add(self);
-            res.add(empty);
-
-            return res;
-        }
-
-        int num = nums[cur];
-
-        List<List<Integer>> next = recurSubsets(nums, cur + 1);
-
-        for (List<Integer> list : next) {
-            List<Integer> copy = new ArrayList<Integer>(list);
-            res.add(copy);
-
-            list.add(0, num);
-            res.add(list);
-        }
+// assume nums are sorted
+        List<Integer> path = new ArrayList<>();
+        res.add(new ArrayList<>());
+        recur(nums, 0, path, res);
         return res;
     }
+
+    public void recur(int[] nums, int index, List<Integer> path, List<List<Integer>> res) {
+        for (int i = index; i < nums.length; i ++) {
+            if (i != index && nums[i] == nums[i - 1]) continue;
+            path.add(nums[i]); // [1] [2] [3]
+            res.add(new ArrayList<>(path));
+            recur(nums, i + 1, path, res);
+            path.remove(path.size() - 1);
+        }
+    }
+
 }

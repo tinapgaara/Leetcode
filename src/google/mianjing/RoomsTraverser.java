@@ -22,7 +22,7 @@ public class RoomsTraverser {
     public class Node {
         public int m_roomNo;
         public int m_precious;
-        public int m_key;  // 如果一个房间里可以有多个key，则改用List
+        public List<RoomKey> m_collectedKeys;  // 如果一个房间里可以有多个key，则改用List
         public List<DirectedEdge> m_edges;
     }
 
@@ -39,7 +39,53 @@ public class RoomsTraverser {
         public Node m_root;
     }
 
+    public boolean isReach(Node fromRoom, Node toRoom) {
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(fromRoom);
+        Set<Node> vis = new HashSet<>();
+        vis.add(fromRoom);
+        // set of rooms which need to visit but have no keys
+        Set<Node> lockedRooms = new HashSet<>();
+        // map : room -> this room's roomkey we have right now
+        Map<Node, RoomKey> collectedKeys = new HashMap<>();
+        while(! queue.isEmpty()) {
+            Node cur = queue.poll();
+            if (cur.m_roomNo == toRoom.m_roomNo) {
+                return true;
+            }
+            if (! vis.contains(cur)) {
+                vis.add(cur);
+                // collect keys of cur room
+                List<RoomKey> keys = cur.m_collectedKeys;
+                if (keys != null) {
+                    for (RoomKey key : keys) {
+                        collectedKeys.put(key.m_room, key);
+                    }
+                }
+                for (DirectedEdge edge : cur.m_edges) {
+                    if (edge.m_keyNeeded) {
+                        lockedRooms.add(edge.m_toNode);
+                    } else {
+                        queue.offer(edge.m_toNode);
+                    }
+                }
+       // since we collect new keys, need to check if be able to unlock the previous locked rooms
+                if (!lockedRooms.isEmpty()) {
+                    for (Node lockedRoom : lockedRooms) {
+                        if (collectedKeys.containsKey(lockedRoom)) {
+                            // unlock this room
+                            lockedRooms.remove(lockedRoom);
+                            queue.offer(lockedRoom);
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     // 返回含有宝藏的某个房间
+    /*
     public Node findAnyPrecious(Graph graph) {
         Queue<Node> accessable = new LinkedList<>();  // 可供访问的
         List<Node> toVisit = new ArrayList<>();  // 待访问的房间列表, without key
@@ -127,8 +173,10 @@ public class RoomsTraverser {
         // 与前面基本相同，但是发现宝藏后不能结束，而是累加，等到最后accessable为空以后再返回累加值
         return count;
     }
+    */
 
     // 判断两个房间是否可达
+    /*
     public boolean isReachable(Node fromRoom, Node toRoom) {
 
         Queue<Node> accessible = new LinkedList<>();
@@ -164,6 +212,7 @@ public class RoomsTraverser {
         }
         return false;
     }
+    */
 
     /*
 

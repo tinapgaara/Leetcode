@@ -6,7 +6,7 @@ import java.util.*;
 
 /**
  * Created by yingtan on 2/27/17.
- * 314. Binary Tree Vertical Order Traversal
+ * 314. Binary Tree Vertical Order BinaryTreeVerticalOrderTraversal
  *
  * Given binary tree [3,9,20,null,null,15,7],
  3

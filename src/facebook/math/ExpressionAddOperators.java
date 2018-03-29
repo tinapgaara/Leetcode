@@ -47,46 +47,36 @@ import java.util.List;
 public class ExpressionAddOperators {
 
     public List<String> addOperators(String num, int target) {
-        List<String> res = new ArrayList<String>();
-        recurAdd(num, target, "", 0, 0, res);
+        List<String> res = new ArrayList<>();
+        if (num == null || num.length() == 0) return res;
+        recurAdd(num, 0, target, 0, "", 0, res);
         return res;
     }
-
-    public void recurAdd(String num, int target, String addOpStr, long curRes, long prevNum, List<String> res) {
-        // 如果计算结果等于目标值，且所有数都用完了，则是有效结果
-        if ( (curRes == target) && (num.length() == 0) ) {
-            res.add(addOpStr);
-            return;
-        }
-
-        for (int i = 0; i < num.length(); i ++) {
-            String substr = num.substring(0, i+1);
-
-            // 对于前导为0的数予以排除
-            if ( (substr.charAt(0) == '0') && (substr.length() > 1) )
-                // 这里是return不是continue
+    public void recurAdd(String num, int index, int target, long sum, String str, long prevsum, List<String> res) {
+        if (index >= num.length()) {
+            if (sum == target) {
+                res.add(str);
                 return;
-
-            // 得到当前截出的数
-            Long curNum = Long.parseLong(substr);
-
-            // 去掉当前的数，得到下一轮搜索用的字符串
-            String nextstr = num.substring(i+1);
-
-            // 如果不是第一个字母时，可以加运算符，否则只加数字
-            if (addOpStr.length() > 0) {
-                // for +
-                recurAdd(nextstr, target, addOpStr + "+" + curNum, curRes + curNum, curNum, res);
-                // for -
-                recurAdd(nextstr, target, addOpStr + "-" + curNum, curRes - curNum, -curNum, res);
-                // for * important!!!!!
-                recurAdd(nextstr, target, addOpStr + "*" + curNum, (curRes - prevNum) + (prevNum * curNum), prevNum * curNum, res);
+            }
+        }
+        for (int i = index ; i < num.length(); i ++) {
+            String curstr = num.substring(index,  i + 1);
+            if (curstr.length() > 1 && curstr.charAt(0) == '0') {
+                // we don't allow 05 important !!!!
+                break;
+            }
+            long curnum = Long.parseLong(curstr);
+            if (index == 0) {
+                recurAdd(num, i + 1, target, curnum, curnum + "", curnum, res);
             }
             else {
-                // 第一个数
-                recurAdd(nextstr, target, curNum+"", curNum, curNum, res);
+                // +
+                recurAdd(num, i + 1, target, sum + curnum, str + "+"  + curnum, curnum, res);
+                // -
+                recurAdd(num, i + 1, target, sum - curnum, str + "-"  + curnum, -1 * curnum, res);
+                // *
+                recurAdd(num, i + 1, target, (sum - prevsum) + prevsum * curnum, str + "*"  + curnum, prevsum * curnum, res);
             }
-
         }
     }
 }

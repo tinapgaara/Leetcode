@@ -46,7 +46,7 @@ public class TwoSumDataStructure {
     }
 
 // Your TwoSum object will be instantiated and called as such:
-// TwoSum twoSum = new TwoSum();
-// twoSum.add(number);
-// twoSum.find(value);
+// TwoSum TwoSum = new TwoSum();
+// TwoSum.add(number);
+// TwoSum.find(value);
 }

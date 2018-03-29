@@ -20,14 +20,20 @@ public class PacificAtlantic {
         */
         for (int i = 0 ; i < row; i ++) {
             // left most col and right most col
-            dfs(i, 0, matrix, pacific, Integer.MIN_VALUE);
-            dfs(i, col -1, matrix, atlantic, Integer.MIN_VALUE);
+            //dfs(i, 0, matrix, pacific, Integer.MIN_VALUE);
+            //dfs(i, col -1, matrix, atlantic, Integer.MIN_VALUE);
+
+            dfs2(i, 0, matrix, pacific);
+            dfs2(i, col -1, matrix, atlantic);
         }
 
         for (int i = 0 ; i < col; i ++) {
             // up most row and down most row
-            dfs(0, i, matrix, pacific, Integer.MIN_VALUE);
-            dfs(row - 1, i, matrix, atlantic, Integer.MIN_VALUE);
+            //dfs(0, i, matrix, pacific, Integer.MIN_VALUE);
+            //dfs(row - 1, i, matrix, atlantic, Integer.MIN_VALUE);
+
+            dfs2(0, i, matrix, pacific);
+            dfs2(row - 1, i, matrix, atlantic);
         }
 
         for (int i = 0 ; i < row; i ++) {
@@ -55,9 +61,25 @@ public class PacificAtlantic {
         }
     }
 
+    public void dfs2(int x, int y, int[][] matrix, boolean[][] vis) {
+        if (! vis[x][y]) {
+            vis[x][y] = true;
+            int[][] dirs = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
+            for (int[] dir : dirs) {
+                int newx = x + dir[0];
+                int newy = y + dir[1];
+                if ((newx >= 0) && (newx < matrix.length) && (newy >= 0) && (newy < matrix[0].length)) {
+                    if (matrix[x][y] <= matrix[newx][newy]) {
+                        dfs2(newx, newy, matrix, vis);
+                    }
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         int[][] arr = new int[][]{{1,2,2,3,5},{3,2,3,4,4},{2,4,5,3,1},{6,7,1,4,5},{5,1,1,2,4}};
         PacificAtlantic ob = new PacificAtlantic();
-        ob.pacificAtlantic(arr);
+        System.out.println(ob.pacificAtlantic(arr));
     }
 }

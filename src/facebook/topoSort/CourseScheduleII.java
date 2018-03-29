@@ -34,7 +34,60 @@ import java.util.List;
  You may assume that there are no duplicate edges in the input prerequisites.
 
  */
+import java.util.*;
 public class CourseScheduleII {
+
+    public int[] findOrder_better(int numCourses, int[][] prerequisites) {
+        int[] res = new int[numCourses];
+        if (prerequisites == null) return res;
+        int[] color = new int[numCourses];
+        Arrays.fill(color, -1);
+        Map<Integer, Set<Integer>> graph = buildgraph(numCourses, prerequisites, color);
+        LinkedList<Integer> linkres = new LinkedList<>();
+        // important !!! loop from number of courses instead of map, sometimes, preq could be empty, but we still have multiple nodes
+        for (int i = 0 ; i < numCourses; i ++) {
+            if(color[i] == 0) {
+                if (! dfs(i, graph, color, linkres)) {
+                    return new int[0];
+                }
+            }
+        }
+        int i = 0;
+        for (Integer r : linkres) {
+            res[i] = r;
+            i ++;
+        }
+        return res;
+    }
+    public Map<Integer, Set<Integer>> buildgraph(int numCourses, int[][] prerequisites, int[] color) {
+        Map<Integer, Set<Integer>> graph = new HashMap<>();
+        for (int i = 0 ; i < numCourses; i ++) {
+            graph.put(i, new HashSet<>());
+            // important !!!!, need to set color[i] = 0 to show that we have this node
+            color[i] = 0;
+        }
+        for(int[] preq : prerequisites) {
+            int from = preq[0];
+            int to = preq[1];
+            graph.get(from).add(to);
+        }
+        return graph;
+    }
+    public boolean dfs(int node, Map<Integer, Set<Integer>> graph, int[] color, LinkedList<Integer> linkres) {
+        color[node] = 1;
+        if (graph.containsKey(node)) {
+            Set<Integer> neighbors = graph.get(node);
+            for (Integer neighbor  : neighbors) {
+                if (color[neighbor] == 1) return false;
+                else if (color[neighbor] == 0) {
+                    if (! dfs(neighbor, graph, color, linkres)) return false;
+                }
+            }
+        }
+        linkres.add(node);
+        color[node] = 2;
+        return true;
+    }
 
     public int[] findOrder(int numCourses, int[][] prerequisites) {
         if (prerequisites == null) return null;

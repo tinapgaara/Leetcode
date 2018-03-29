@@ -14,10 +14,8 @@ public class MinMeetingRooms {
 
     public int minMeetingRooms(Interval[] intervals) {
         if (intervals == null || intervals.length == 0) return 0;
-
         IntervalComparator comparator = new IntervalComparator();
         Arrays.sort(intervals, comparator);
-
         Queue<Integer> queue = new PriorityQueue<Integer>();
         queue.offer(0);
         for (int i = 0 ; i < intervals.length; i ++) {
@@ -30,6 +28,31 @@ public class MinMeetingRooms {
 
         return queue.size();
 
+    }
+
+    public int maxOverlapCount(Interval[] intervals) {
+        if (intervals == null) return 0;
+        IntervalComparator comp = new IntervalComparator();
+        Arrays.sort(intervals, comp);
+        // stores all overlapped intervals
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        int max = 0;
+        for (Interval interval : intervals) {
+            if(queue.isEmpty()) {
+                queue.offer(interval.end);
+                max = Math.max(max, 1);
+                continue;
+            }
+            else {
+                // pop all interval which ends before this interval, those intervals can not overlap with the current interval
+                while(! queue.isEmpty() && queue.peek() <= interval.start) {
+                    queue.poll();
+                }
+                queue.offer(interval.end);
+                max = Math.max(max, queue.size());
+            }
+        }
+        return max;
     }
 
     public class IntervalComparator implements Comparator<Interval> {

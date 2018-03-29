@@ -36,4 +36,34 @@ public class MinMissingNum {
         int[] nums = new int[]{0,1,3,4,6,7,8};
         System.out.println(ob.findMissing(nums, 2));
     }
+
+    public void quickSort(int[] arr, int low, int high) {
+        if (high >= low) return;
+        int pivot = low + (high - low) / 2;
+        int i = low;
+        int j = high;
+        // each while make sure that pivot is at its correct place
+        while(i <= j) {
+            while(i <=j && arr[i] < arr[pivot]) {
+                i ++;
+            }
+            while(i <=j && arr[j] > arr[pivot]) {
+                j --;
+            }
+
+            if (i <= j) {
+                int tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+                i ++;
+                j --;
+            }
+        }
+        if (j > low) {
+            quickSort(arr, low, j);
+        }
+        if (i < high) {
+            quickSort(arr, i, high);
+        }
+    }
 }

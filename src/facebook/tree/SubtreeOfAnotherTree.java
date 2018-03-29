@@ -49,25 +49,17 @@ import tree.TreeNode;
 public class SubtreeOfAnotherTree {
 
     public boolean isSubtree(TreeNode s, TreeNode t) {
-        if (s == null && t == null) return true;
-        if ( (s != null) && (t != null) ) {
-
-            // check if two tree looks the same
-            if (s.val == t.val) {
-                if (isSame(s.left, t.left) && isSame(s.right, t.right)) return true;
-            }
-            // Important !!! boundary case : [1, 1] [1]
-            // if two tree are not the same, must check subtree
-            if (isSubtree(s.left, t) || (isSubtree(s.right, t))) return true;
-        }
-        return false;
+        if (s == null) return false;
+        if (t == null) return true;
+        if (isSame(s, t)) return true;
+        return isSubtree(s.left, t) || isSubtree(s.right, t);
     }
 
     public boolean isSame(TreeNode s, TreeNode t) {
         if (s == null && t == null) return true;
-        if ( (s != null) && (t != null) ) {
+        if (s != null && t != null) {
             if (s.val == t.val) {
-                if(isSame(s.left, t.left) && (isSame(s.right, t.right))) return true;
+                return isSame(s.left, t.left) && isSame(s.right, t.right);
             }
         }
         return false;

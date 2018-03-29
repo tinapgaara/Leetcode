@@ -5,6 +5,25 @@ package facebook.binarySearch;
  */
 public class SqrtX {
 
+    public int mySqrt_iteration(int x) {
+        if (x < 0) return -1;
+        if (x == 0) return 0;
+        if (x == 1) return 1;
+        long low = 0;
+        long high = x / 2;
+        while(low <= high) {
+            long med = low + (high - low) / 2;
+            if (med * med == x) return (int)med;
+            else if (med * med < x) {
+                low = med + 1;
+            }
+            else
+                high = med - 1;
+        }
+        // important!!!! always choose high one as a result
+        return (int)high;
+    }
+
     public int mySqrt(int x) {
         if (x < 0) return -1;
         if (x == 0) return 0;

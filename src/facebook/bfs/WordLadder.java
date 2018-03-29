@@ -25,7 +25,6 @@ import java.util.*;
  return its length 5.
  */
 public class WordLadder {
-
     /*
         Need to use BFS for  shortest distance
         If use DFS, since this ends when word == endWord, however, the sequence can be infinite, so can not go one path infinitely at first, need to do bfs
@@ -37,44 +36,37 @@ public class WordLadder {
 
     */
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        if (beginWord == null || endWord == null || wordList == null) return 0;
+        if (beginWord == null || beginWord.length() == 0 || endWord == null || endWord.length() == 0 || wordList == null || wordList.size() == 0) {
+            return 0;
+        }
         Queue<String> words = new LinkedList<String>();
         Queue<Integer> dist = new LinkedList<Integer>();
-        dist.offer(1);
         words.offer(beginWord);
-
-        // Important ! must translate list to a set
         Set<String> wordSet = new HashSet<String>();
-        for (String w : wordList) {
-            wordSet.add(w);
-        }
-
-        while(!words.isEmpty()) {
-            String word = words.poll();
+        wordSet.addAll(wordList);
+        dist.offer(0);
+        while(! words.isEmpty()) {
+            String curWord = words.poll();
             int dis = dist.poll();
-            int len = word.length();
-
-            for(int i = 0 ; i < len; i ++) {
-                char[] chs = word.toCharArray();
-                for (int k = 'a'; k < 'z' ; k ++) {
-                    chs[i] = (char)k;
-
-                    String newstr = new String(chs);
-
-                    if (wordSet.contains(newstr)) {
-                        // Important !!! endWord must exist in wordSet
-                        if (newstr.equals(endWord)) {
-                            return dis + 1;
-                        }
-                        words.offer(newstr);
-                        //Important !!! must remove this str from set
-                        wordSet.remove(newstr);
-
-                        dist.offer(dis+1);
+            if (curWord.equals(endWord)) {
+                return dis + 1;
+            }
+            for (int i = 0; i < curWord.length(); i ++) {
+                char[] chs = curWord.toCharArray();
+                for (char c = 'a'; c <= 'z'; c ++) {
+                    chs[i] = c;
+                    String newWord = new String(chs);
+                    if (wordSet.contains(newWord)) {
+                        words.offer(newWord);
+                        dist.offer(dis + 1);
+                        // important!!!  replace the visited flag array, make sure the same word will not be added to the queue multiple time,
+                        // and the first time we hit this word, must is the shortest distance. don't need to add this word back to dict
+                        wordSet.remove(newWord);
                     }
                 }
             }
         }
         return 0;
     }
+
 }

@@ -23,7 +23,35 @@ public class GasStation {
         return index[0];
 
     }
-
+    // strategically find the best point to start, best point to start is the one which min neg sum
+    public int canCompleteCircuit_minWay(int[] gas, int[] cost) {
+        if ((gas == null) || (cost == null) || (gas.length == 0) || (cost.length == 0) )
+            return -1;
+        int sum = 0;
+        int total = 0;
+        int startPointMinusOne = -1;
+        int min = Integer.MAX_VALUE;// store the min sum on the way
+        for (int i = 0 ; i < gas.length; i ++) {
+            sum = sum + gas[i] - cost[i];
+            total = total + gas[i] - cost[i];
+            if (sum < 0) {
+                if (sum < min) {
+                    min = sum; // this is min neg sum, so starsts from the next pos
+                    startPointMinusOne = i + 1;
+                }
+            }
+        }
+        if (startPointMinusOne == -1) {
+            // all positive on the way, can randomly start from 0
+            startPointMinusOne = 0;
+        }
+        if (total >= 0) {
+            return startPointMinusOne; // important !!!!
+        }
+        else
+            return -1;
+    }
+    // keep trying all possible starting point
     public int canCompleteCircuit(int[] gas, int[] cost) {
         if ((gas == null) || (cost == null) || (gas.length == 0) || (cost.length == 0) )
             return -1;
@@ -37,6 +65,7 @@ public class GasStation {
 
             if (sum < 0) {
                 // change starting point since the previous starting point i causes the minus value of gas in trip
+                // not possible to start from prev i, try to start with current i.
                 startPointMinusOne = i;
                 // reset the sum
                 sum = 0;
@@ -44,7 +73,7 @@ public class GasStation {
             }
         }
         if (total >= 0) {
-            return startPointMinusOne  + 1; // important !!!!
+            return startPointMinusOne  + 1; // important !!!! current i can work
         }
         else
             return -1;

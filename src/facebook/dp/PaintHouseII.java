@@ -29,6 +29,72 @@ We can use min1 and min2 to track the indices of the 1st and 2nd smallest cost t
 The code below modifies the value of costs[][] so we don't need extra space.
     * */
 
+    public int minCostII_latter(int[][] costs) {
+        if (costs == null || costs.length == 0) return 0;
+        int houseNum = costs.length;
+        int colorNum = costs[0].length;
+        int min1 = -1;
+        int min2 = -1;
+        // calculate the first house
+        for (int j = 0 ; j < colorNum; j ++) {
+            int cost = costs[0][j];
+            if (min1 == -1 || cost < costs[0][min1]) {
+                min2 = min1;
+                min1 = j;
+            }
+            else if (min2 == -1 || cost < costs[0][min2]) {
+                min2 = j;
+            }
+        }
+        for (int i = 1 ; i < houseNum; i ++) {
+            int prevMin1 = min1;
+            int prevMin2 = min2;
+            min1 = -1;
+            min2 = -1;
+            for (int j = 0 ; j < colorNum; j ++) {
+                // can use  [prevmin1] + costs[i][j]
+                if (j != prevMin1) {
+                    costs[i][j] = costs[i][j] + costs[i-1][prevMin1] ;
+                }
+                // can not use [prevmin1] + costs[i][j], only can use prevmin2 + costs[i][j]
+                else {
+                    costs[i][j] = costs[i][j] + costs[i-1][prevMin2] ;
+                }
+                // record min1 min2 for house i
+                if (min1 == -1 || costs[i][j] < costs[i][min1]) {
+                    min2 = min1;
+                    min1 = j;
+                }
+                else if (min2 == -1 || costs[i][j] < costs[i][min2]) {
+                    min2 = j;
+                }
+            }
+
+        }
+        /*
+        // o(nk*k) slow one
+        for (int i = 1 ; i < houseNum; i ++) {
+            for (int j = 0 ; j < colorNum; j ++) {
+                int colorToUse = j;
+                int min = Integer.MAX_VALUE;
+                for (int prevHouseColor = 0 ; prevHouseColor < colorNum; prevHouseColor ++) {
+                    if (prevHouseColor != colorToUse) {
+                       min = Math.min(min, costs[i-1][prevHouseColor]);
+                    }
+                }
+                costs[i][j] = costs[i][j] + min;
+            }
+        }
+        int res =  Integer.MAX_VALUE;
+        for (int j = 0 ; j < colorNum; j ++) {
+            res = Math.min(res, costs[houseNum-1][j]);
+        }
+        return res;
+        */
+        return costs[houseNum - 1][min1];
+    }
+
+
     public int minCostII_better(int[][] costs) {
         if (costs == null || costs.length == 0) return 0;
 

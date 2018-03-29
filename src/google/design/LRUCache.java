@@ -1,9 +1,6 @@
 package google.design;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yingtan on 8/1/17.
@@ -35,7 +32,6 @@ import java.util.Map;
 public class LRUCache {
 
     public class LRUCacheBetter {
-
         private int size;
         private Map<Integer, Node> cache;
         private Node head;

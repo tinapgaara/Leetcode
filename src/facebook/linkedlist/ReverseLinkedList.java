@@ -15,6 +15,7 @@ import linkedlist.ListNode;
  */
 public class ReverseLinkedList {
 
+    // iteration
     public ListNode reverseList(ListNode head) {
         if (head == null) return null;
 
@@ -28,5 +29,18 @@ public class ReverseLinkedList {
             cur = next;
         }
         return prev;
+    }
+
+    // recursion:
+    public ListNode reverseList_2(ListNode head) {
+        return recurReverse(head, null);
+    }
+    public ListNode recurReverse(ListNode cur, ListNode prev) {
+        if (cur == null) {
+            return prev;
+        }
+        ListNode next = cur.next;
+        cur.next = prev;
+        return recurReverse(next, cur);
     }
 }

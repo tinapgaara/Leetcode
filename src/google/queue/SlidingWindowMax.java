@@ -26,7 +26,7 @@ public class SlidingWindowMax {
                 queueIndex.poll();
             }
             // insure the queue is decreasing queue
-            while (! queueIndex.isEmpty() && nums[queueIndex.peekLast()] < nums[i]) {
+            while (! queueIndex.isEmpty() && nums[queueIndex.peekLast()] > nums[i]) {
                 // we need to poll the last one
                 queueIndex.removeLast();
             }
@@ -37,5 +37,9 @@ public class SlidingWindowMax {
             }
         }
         return res;
+    }
+
+    public static void main(String[] args) {
+
     }
 }

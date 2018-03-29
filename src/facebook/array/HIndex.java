@@ -36,16 +36,10 @@ public class HIndex {
     public int hIndex(int[] citations) {
         if (citations == null || citations.length == 0) return 0;
         Arrays.sort(citations);
-        // candidate h must be of one of [1 - citations.length] because it is the number of N papers
-        int len = citations.length;
-        for (int i = 0 ; i < len; i ++) {
-            int paperNum = len - i;
-            int hValue = paperNum;
-            if (citations[i] >= hValue) {
-                // there are paperNum papers whose value >= citations[i] >= hValue
-
-                // max value, i is smaller, hValue is larger
-                return hValue;
+        for(int i = 0 ; i < citations.length ; i++) {
+            int h = citations.length - i;
+            if (citations[i] >= h) {
+                return h;
             }
         }
         return 0;

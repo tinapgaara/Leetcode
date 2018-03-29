@@ -9,7 +9,7 @@ import java.util.Stack;
 /**
  * Created by yingtan on 10/29/17.
  *
- * 94. Binary Tree Inorder Traversal
+ * 94. Binary Tree Inorder BinaryTreeVerticalOrderTraversal
  DescriptionHintsSubmissionsDiscussSolution
  Discuss Pick One
  Given a binary tree, return the inorder traversal of its nodes' values.

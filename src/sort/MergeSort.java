@@ -46,6 +46,45 @@ public class MergeSort {
     * }
     * */
 
+    public void mergeSortnew(int[] nums, int low, int high) {
+        if (low < high) {
+            int mid = low + (high - low) / 2;
+            mergeSortnew(nums, low, mid);
+            mergeSortnew(nums, mid + 1, high);
+            combine(nums, low, mid, high);
+        }
+    }
+    public void combine(int[] nums, int low, int mid, int high) {
+        int[] helper = new int[nums.length];
+        for(int i = 0; i < nums.length; i ++) {
+            helper[i] = nums[i];
+        }
+        int i = low;
+        int j = mid + 1;
+        int k = low;
+        while(i <= mid && j <= high) {
+            if (helper[i] < helper[j]) {
+                nums[k] = helper[i];
+                i ++;
+            }
+            else {
+                nums[k] = helper[j];
+                j ++;
+            }
+            k ++;
+        }
+        while(i <= mid) {
+            nums[k] = helper[i];
+            i ++;
+            k ++;
+        }
+        while(j <= high) {
+            nums[k] = helper[j];
+            j ++;
+            k ++;
+        }
+    }
+
     public void mergeSort(int[] num, int low, int high) {
         if (low < high) {
             int mid = (low + high) / 2;
@@ -210,7 +249,10 @@ public class MergeSort {
 
     public static void main(String[] args) {
         MergeSort ob = new MergeSort();
-        int[] num = new int[]{3,5,1,4,6};
-        ob.mergeSort(num, 0, num.length-1);
+        int[] num = new int[]{3,5,1,4,6,0,-2,7,-1,0};
+        ob.mergeSortnew(num, 0, num.length-1);
+        for (int i = 0 ; i < num.length; i ++) {
+            System.out.println(num[i]);
+        }
     }
 }

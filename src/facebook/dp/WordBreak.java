@@ -25,23 +25,19 @@ import java.util.List;
 public class WordBreak {
 
     public boolean wordBreak(String s, List<String> wordDict) {
-        if (s == null || wordDict.size() == 0) return false;
-        int start = 0;
+        if (s == null || wordDict == null) return false;
         boolean[] dp = new boolean[s.length() + 1];
         dp[0] = true;
-        while (start < s.length()) {
-            if (dp[start]) {
-                for (String word : wordDict) {
-                    int end = start + word.length();
-                    if (end <= s.length()) {
-                        String subword = s.substring(start, end);
-                        if ( (subword != null) && (subword.equals(word)) ) {
-                            dp[end] = true;
-                        }
+        for (int i = 0; i < s.length(); i++) {
+            if (! dp[i]) continue;
+            for (String word : wordDict) {
+                if (i + word.length() <= s.length()) {
+                    int end = i + word.length();
+                    if (s.substring(i, end).equals(word)) {
+                        dp[end] = true;
                     }
                 }
             }
-            start ++;
         }
         return dp[s.length()];
     }

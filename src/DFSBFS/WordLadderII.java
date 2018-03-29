@@ -26,20 +26,6 @@ import java.util.*;
 * */
 public class WordLadderII {
 
-    public class Node {
-
-        String mNodeStr;
-        int mDist;
-        Node mPi;
-        int mColor;
-
-        public Node(String nodestr, int dist, Node pi, int color) {
-            mNodeStr = nodestr;
-            mDist = dist;
-            mPi = pi;
-            mColor = color;
-        }
-    }
 
 // IMportant !!!1 : How to keep a level information in queue : use prevLevel and cureDist
 
@@ -52,113 +38,85 @@ public class WordLadderII {
     // 4) When using PI pointer to form list, can not ensure the shortest size of list (not like BFS)
     //    Need to keep minDist to judge if this list's size() is <= minDist. If so, need to add to result
 
-
-
-    public List<List<String>> findLadders(String beginWord, String endWord, Set<String> wordList) {
-        Queue<Node> queue = new LinkedList<>();
-        List<List<String>> res = new ArrayList<List<String>>();
-        queue.offer(new Node(beginWord, 1, null, 1)); // color = grey
-
-        int prevLevel = 0;
-        int minDist = Integer.MAX_VALUE;
-        Set<String> curLevelVisited = new HashSet<>();
-
-        while (!queue.isEmpty()) {
-            Node cur = queue.poll();
-            String word = cur.mNodeStr; // hit
-            int dist = cur.mDist;
-            int color = cur.mColor;
-
-            if (dist != prevLevel) {
-                //wordList.removeAll(curLevelVisited);
-                prevLevel = dist;
-                curLevelVisited.clear();
-            }
-            if (word.equals(endWord)) {
-                if (dist <= minDist) { // must be <=
-                    minDist = dist;
-                    constructResList(res, cur);
-                }
-                continue;
-            }
-            for (int i = 0 ; i < word.length(); i ++) {
-                for (int j = 0 ; j < 26; j ++) {
-                    char[] chs = word.toCharArray();
-                    char newch = (char)(j + 'a');
-                    chs[i] = newch;
-                    String newword = new String(chs);
-                    if (wordList.contains(newword)) {
-                        //curLevelVisited.add(newword);
-                        wordList.remove(newword);
-                        queue.offer(new Node(newword, dist+1, cur, 1));
-                    }
-                }
-            }
-            cur.mColor = 2;
-        }
-        return res;
-    }
-
     public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
-        Queue<Node> queue = new LinkedList<>();
         List<List<String>> res = new ArrayList<List<String>>();
-        queue.offer(new Node(beginWord, 1, null, 1)); // color = grey
-
-        int prevLevel = 0;
-        int minDist = Integer.MAX_VALUE;
-        Set<String> curLevelVisited = new HashSet<>();
-
-        while (!queue.isEmpty()) {
-            Node cur = queue.poll();
-            String word = cur.mNodeStr; // hit
-            int dist = cur.mDist;
-            int color = cur.mColor;
-
-            if (dist != prevLevel) {
-                //wordList.removeAll(curLevelVisited);
-                prevLevel = dist;
-                curLevelVisited.clear();
-            }
-            if (word.equals(endWord)) {
-                if (dist <= minDist) { // must be <=
-                    minDist = dist;
-                    constructResList(res, cur);
-                }
-                continue;
-            }
-            for (int i = 0 ; i < word.length(); i ++) {
-                for (int j = 0 ; j < 26; j ++) {
-                    char[] chs = word.toCharArray();
-                    char newch = (char)(j + 'a');
-                    chs[i] = newch;
-                    String newword = new String(chs);
-                    if (wordList.contains(newword)) {
-                        //curLevelVisited.add(newword);
-                        wordList.remove(newword);
-                        queue.offer(new Node(newword, dist+1, cur, 1));
-                    }
-                }
-            }
-            cur.mColor = 2;
+        if (beginWord == null || endWord == null || wordList.size() == 0) {
+            return res;
         }
+        Map<String, Integer> distance = new HashMap<>();
+        Map<String, Set<String>> graph = new HashMap<>();
+        Queue<String> queue = new LinkedList<>();
+        Set<String> wordSet = new HashSet<>();
+
+        for (String word : wordList) {
+            wordSet.add(word);
+        }
+        bfs(beginWord, endWord, distance, graph, queue, wordSet);
+        List<String> path = new ArrayList<>();
+        path.add(endWord);
+        dfs(beginWord, endWord, distance, graph, path, res);
         return res;
     }
-
-    public void constructResList(List<List<String>> res, Node node) {
-        List<String> level = new ArrayList<String>();
-
-        while(node != null) {
-            level.add(0, node.mNodeStr);
-            node = node.mPi;
+    public void bfs(String beginWord, String endWord, Map<String, Integer> distance, Map<String, Set<String>> graph, Queue<String> queue,  Set<String> wordSet) {
+        queue.offer(beginWord);
+        distance.put(beginWord, 0);
+        for (String word :wordSet) {
+            graph.put(word, new HashSet<>());
         }
-        res.add(level);
+        graph.put(beginWord, new HashSet<>());
+        while(! queue.isEmpty()) {
+            String word = queue.poll();
+            int dist = distance.get(word);
+            boolean reachEnd = false;
+            for (int i = 0 ; i < word.length(); i ++) {
+                for (char ch = 'a'; ch <= 'z'; ch ++) {
+                    char[] chs = word.toCharArray();
+                    chs[i] = ch;
+                    String newWord = new String(chs);
+                    // need to do this
+                    if (! newWord.equals(word) && wordSet.contains(newWord)) {
+                        graph.get(newWord).add(word);
+                        if (! distance.containsKey(newWord)) {
+                            distance.put(newWord, dist + 1);
+                            queue.offer(newWord);
+                        }
+                    }
+                    if (newWord.equals(endWord)) {
+                        reachEnd = true;
+                    }
+                }
+                if (reachEnd) {
+                    // word -> endWord, no need to try other positions in word
+                    break;
+                }
+            }
+        }
+    }
+    public void dfs(String beginWord, String curWord, Map<String, Integer> distance, Map<String, Set<String>> graph, List<String> path, List<List<String>> res) {
+        if (curWord.equals(beginWord)) {
+            List<String> copyPath = new ArrayList<>(path);
+            Collections.reverse(copyPath);
+            res.add(new ArrayList<>(copyPath));
+            return;
+        }
+        if (! graph.containsKey(curWord)) {
+            return;
+        }
+        for (String neighbor : graph.get(curWord)) {
+            if (distance.get(neighbor) + 1 == distance.get(curWord)) {
+                // go neighbor the next time
+                path.add(neighbor);
+                dfs(beginWord, neighbor, distance, graph, path, res);
+                path.remove(path.size() - 1);
+            }
+        }
     }
 
     public static void main(String[] args) {
         WordLadderII ob = new WordLadderII();
-        String begin = "red";
-        String end = "tax";
-        Set<String> word = new HashSet<>(Arrays.asList("ted","tex","red","tax","tad","den","rex","pee"));
+        String begin = "hit";
+        String end = "cog";
+        List<String> word = new ArrayList<>(Arrays.asList("hot","dot","dog","lot","log"));
 
         System.out.println(ob.findLadders(begin, end, word));
     }

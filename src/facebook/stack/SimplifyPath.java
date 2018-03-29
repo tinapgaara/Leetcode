@@ -28,41 +28,40 @@ import java.util.Stack;
 
  */
 public class SimplifyPath {
-
     public String simplifyPath(String path) {
-        if(path == null||path.length()==0)
-            return path;
-
-        Stack<String> stack = new Stack<String>();
-        String[] list = path.split("/");
-
-        for(int i=0; i<list.length; i++){
-            if(list[i].equals(".")||list[i].length()==0)
-                continue;
-            else if(list[i].equals("..")) {
-                if(!stack.isEmpty())
-                    stack.pop();
+        if (path == null || path.length() == 0) return path;
+        Stack<String> stack = new Stack<>();
+        String[] parts = path.split("/");
+        for (String part : parts) {
+            if (part.length() == 0) continue; // /home//foo/
+            if (part.equals(".")) continue;
+            if (part.equals("..")) {
+                // important !!!! should firstly check is stack.isEmpty()
+                if (! stack.isEmpty()) stack.pop();
             }
-            else{
-                stack.push(list[i]);
+            else {
+                stack.push(part);
             }
         }
-
-        StringBuilder res = new StringBuilder();
-
-        // important !!!!
-        // reverse orders in stack
-        Stack<String> temp = new Stack<String>();
-        while(!stack.isEmpty())  {
-            temp.push(stack.pop());
+        //  very important !!!!!
+        String res = "";
+        if (stack.isEmpty()) {
+            return "/";
         }
-
-        while(!temp.isEmpty())
-            res.append("/"+temp.pop());
-
-        if(res.length()==0)
-            res.append("/");
-
-        return res.toString();
+        else {
+            while(! stack.isEmpty()) {
+                res = "/" + stack.pop() + res;
+            }
+        }
+        /*
+        if (! stack.isEmpty()) {
+            res = stack.pop(); // the first part
+        }
+        while(! stack.isEmpty()) {
+            res = stack.pop() + "/" + res;
+        }
+        res = "/" + res; // for  case  "/"
+        */
+        return res;
     }
 }

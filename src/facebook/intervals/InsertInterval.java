@@ -31,68 +31,46 @@ import java.util.List;
 public class InsertInterval {
 
     public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
-        List<Interval> res = new ArrayList<Interval>();
-        // boundary case
-        if (intervals == null) return res;
-        else if (intervals.size() == 0) {
-            res.add(newInterval);
+        List<Interval> res = new ArrayList<>();
+        if (intervals == null ) {
             return res;
         }
-
-        if (newInterval == null) return intervals;
-
-        Interval i1 = intervals.get(0);
-        Interval i2 = newInterval;
-        for (int i = 1; i < intervals.size(); i ++) {
-            if (overlap(i1, i2)) {
-                i1 = merge(i1, i2);
-                i2 = intervals.get(i);
+        IntervalComparator comp = new IntervalComparator();
+        Collections.sort(intervals, comp);
+        for (Interval interval : intervals) {
+            if (overlap(newInterval, interval)) {
+                newInterval = merge(newInterval, interval);
             }
             else {
-                res.add(i1);
-                i1 = intervals.get(i);
+                // not overlap. [newInterval, Interval]
+                if (newInterval.end < interval.start) {
+                    res.add(newInterval);
+                    newInterval = interval;
+                }
+                // not overlap. [Interval, newInterval]
+                else if (interval.end < newInterval.start) {
+                    res.add(interval);
+                }
             }
         }
-
-        // important !!!
-        if ( (i1 != null) && (i2 != null) ) {
-            if(overlap(i1, i2)) {
-                res.add(merge(i1, i2));
-            }
-            else {
-                res.add(i1);
-                res.add(i2);
-            }
-        }
-
-        // Important !!! sort happens at the end
-        IntervalComparator comparator = new IntervalComparator();
-        Collections.sort(res, comparator);
+        res.add(newInterval);
         return res;
-
     }
-
-    public Interval merge(Interval cur, Interval newInterval) {
-        return new Interval(Math.min(cur.start, newInterval.start), Math.max(cur.end, newInterval.end));
+    public boolean overlap(Interval i1, Interval i2) {
+        return (i1.start <= i2.end && i2.start <= i1.end);
     }
-
-    public boolean overlap(Interval prev, Interval cur) {
-        if ( (prev.start <= cur.end) && (cur.start <= prev.end) )
-            return true;
-        else
-            return false;
+    public Interval merge(Interval i1, Interval i2) {
+        return new Interval(Math.min(i1.start, i2.start), Math.max(i1.end, i2.end));
     }
-
     public class IntervalComparator implements Comparator<Interval> {
-        @Override
         public int compare(Interval i1, Interval i2) {
-            if (i1.start != i2.start) {
-                return i1.start - i2.start;
-            }
-            else if (i1.end != i2.end) {
+            if (i1.start == i2.start) {
                 return i1.end - i2.end;
             }
-            return 0;
+            else {
+                return i1.start - i2.start;
+            }
         }
     }
+
 }

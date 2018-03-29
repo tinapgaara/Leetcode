@@ -87,7 +87,7 @@ public class AddBoldTagInString {
     public static  void main(String[] args) {
         AddBoldTagInString ob = new AddBoldTagInString();
         String s = "aaabbcc";
-        String[] dict = new String[]{"aaa","aab", "bc", "aaabbcc"};
+        String[] dict = new String[]{"aaa","aab", "bc"};
         ob.addBoldTag(s, dict);
     }
 }

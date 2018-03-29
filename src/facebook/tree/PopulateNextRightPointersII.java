@@ -42,8 +42,33 @@ public class PopulateNextRightPointersII {
      *     TreeLinkNode(int x) { val = x; }
      * }
      */
-    public class Solution {
-        public void connect(TreeLinkNode root) {
+    public void connect(TreeLinkNode root) {
+        // important !!! to use dummyHead
+        TreeLinkNode dummyHead = new TreeLinkNode(0);
+        TreeLinkNode prev = dummyHead;
+        TreeLinkNode cur = root;
+        while(cur != null) {
+            if (cur.left != null) {
+                prev.next = cur.left;
+                prev = prev.next;
+            }
+            if (cur.right != null) {
+                prev.next = cur.right;
+                prev = prev.next;
+            }
+            cur = cur.next;
+            if (cur == null) {
+                // need to move to the next level!!!!
+                // reset prev pointer
+                prev = dummyHead;
+                // move to the head of next level
+                cur = dummyHead.next;
+                // important !!! need to set dummyHead.next = null to end the while loop,so the next cur = null and end loops eg: {1,2}
+                dummyHead.next = null;
+            }
+        }
+    }
+    public void connect_2(TreeLinkNode root) {
             if (root == null) return;
             // move two pointers,
             // the first one: cur is moving one the first level
@@ -93,5 +118,4 @@ public class PopulateNextRightPointersII {
                 }
             }
         }
-    }
 }

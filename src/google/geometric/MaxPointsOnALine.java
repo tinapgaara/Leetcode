@@ -14,10 +14,8 @@ public class MaxPointsOnALine {
 
     public int maxPoints(Point[] points) {
         if(points == null || points.length == 0) return 0;
-
         HashMap<Double, Integer> result = new HashMap<Double, Integer>();
         int max=0;
-
         for(int i=0; i<points.length; i++){
             int duplicate = 1;
             int vertical = 0;
@@ -41,18 +39,53 @@ public class MaxPointsOnALine {
                     }
                 }
             }
-
             for(Integer count: result.values()){
                 if(count+duplicate > max){
                     max = count+duplicate;
                 }
             }
-
             max = Math.max(vertical + duplicate, max);
             result.clear();
         }
+        return max;
+    }
 
-
+    public int maxPoints2(Point[] points) {
+        // map from slope -> number of points
+        Map<Double, Integer> counts = new HashMap<Double, Integer>();
+        int max = 0 ;
+        for(int i = 0 ; i < points.length; i ++) {
+            int duplicate = 1;
+            int vertical = 0;
+            Point p1 = points[i];
+            for (int j = i + 1; j < points.length; j ++) {
+                Point p2 = points[j];
+                if (p1.x == p2.x) {
+                    if (p1.y == p2.y) {
+                        duplicate ++;
+                    }
+                    else {
+                        vertical ++;
+                    }
+                }
+                else {
+                    double deltay = 1.0 * (p1.y - p2.y);
+                    double slop = deltay / (p1.x - p2.x);
+                    if (counts.containsKey(slop)) {
+                        counts.put(slop, counts.get(slop) + 1);
+                    }
+                    else {
+                        counts.put(slop, 1);
+                    }
+                }
+            }
+            for (Integer count : counts.values()) {
+                if (count + duplicate > max) {
+                    max = count + duplicate;
+                }
+            }
+            max = Math.max(max, duplicate + vertical);
+        }
         return max;
     }
 }

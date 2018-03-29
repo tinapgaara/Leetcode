@@ -42,7 +42,6 @@ public class WordSearch {
         }
         return false;
     }
-
     public boolean recurSearch(char[][] board, int i, int j, boolean[][] vis, String word, int index) {
         if (index >= word.length()) return true;
 
@@ -62,4 +61,5 @@ public class WordSearch {
         }
         return false;
     }
+
 }

@@ -1,9 +1,6 @@
 package google.topK;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * Created by yingtan on 11/26/15.
@@ -15,6 +12,38 @@ import java.util.PriorityQueue;
 * 海量日志数据，提取出某日访问google次数最多的那个IP。
 * */
 public class TopKIP {
+
+    // 2017.11.15
+    Map<String, Integer> ipCount = new HashMap<>();
+    public class IPComparator2 implements Comparator<String> {
+        public int compare(String ip1, String ip2) {
+            return ipCount.get(ip1) - ipCount.get(ip2);
+        }
+    }
+    IPComparator2 p = new IPComparator2();
+    PriorityQueue<String> ipQueue = new PriorityQueue<String>(p);
+    int k = 3;
+    public void update2(String ip) {
+        if (ipCount.containsKey(ip)) {
+            ipCount.put(ip, ipCount.get(ip) + 1);
+        }
+        else {
+            ipCount.put(ip, 1);
+            ipQueue.offer(ip);
+            if (ipQueue.size() > k) {
+                ipQueue.poll();
+            }
+        }
+    }
+    public void extractTopK2() {
+        List<String> res = new ArrayList<>();
+        while(! ipQueue.isEmpty()) {
+            String s = ipQueue.poll();
+            res.add(0, s);
+            System.out.println(s + ", count:" + ipCount.get(s));
+        }
+
+    }
 
     public class IP {
         int count;
@@ -85,11 +114,14 @@ public class TopKIP {
 
     public static void main(String[] args) {
         TopKIP ob = new TopKIP(4);
-        ob.update("hello");
-        ob.update("hello");
-        ob.update("why");
+        ob.update2("hello");
+        ob.update2("hello");
+        ob.update2("why");
+        ob.update2("me");
+        ob.update2("me");
+        ob.update2("hello");
 
-        ob.extractTopK();
+        ob.extractTopK2();
     }
 
 }

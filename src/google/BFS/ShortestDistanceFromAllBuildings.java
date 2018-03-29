@@ -41,6 +41,68 @@ public class ShortestDistanceFromAllBuildings {
         }
     }
 
+    public int shortestDistance3(int[][] grid) {
+        if ( (grid == null) || (grid.length == 0) )
+            return 0;
+
+        int row = grid.length;
+        int col = grid[0].length;
+
+        // total dist between x,y and all other buildings
+        int[][] distance = new int[row][col];
+
+        // how many buildings can (x, y) reach
+        int[][] num = new int[row][col];
+        int totalBuildings = 0;
+        Queue<Point> queue = new LinkedList<Point>();
+        for (int i = 0 ; i < row; i ++) {
+            for (int j = 0; j < col; j ++) {
+                if (grid[i][j] == 1) {
+                    queue.offer(new Point(i, j, 0));
+                    totalBuildings ++;
+                }
+            }
+        }
+        bfs(queue, distance, grid, num);
+        int min = Integer.MAX_VALUE;
+        for (int i = 0 ; i < row; i ++) {
+            for (int j = 0; j < col; j ++) {
+                if (grid[i][j] == 0 && distance[i][j] != 0 && num[i][j] == totalBuildings)
+                    min = Math.min(min, distance[i][j]);
+            }
+        }
+        if (min < Integer.MAX_VALUE)
+            return min;
+        else
+            return -1;
+    }
+
+    public void bfs(Queue<Point> queue, int[][] distance, int[][] grid, int[][] num) {
+        boolean[][] vis = new boolean[grid.length][grid[0].length];
+        while (! queue.isEmpty()) {
+            Point p = queue.poll();
+            int x = p.x;
+            int y = p.y;
+            int dis = p.dist;
+            vis[x][y] = true;
+            // update distance
+            distance[x][y] = distance[x][y] + dis;
+            System.out.println("set x:" + x + ", y:" + y + "distance:" + distance[x][y]);
+
+            int[][] dirs = {{0,1},{0,-1},{-1,0},{1,0}};
+            for (int[] dir: dirs) {
+                int newx = x + dir[0];
+                int newy = y + dir[1];
+                if ( (newx >= 0) && (newx < distance.length) && (newy >= 0) && (newy < distance[0].length) ) {
+                    if (! vis[newx][newy] && grid[newx][newy] == 0) {
+                        queue.offer(new Point(newx, newy, dis + 1));
+                        num[newx][newy] ++;
+                    }
+                }
+            }
+        }
+    }
+
     public int shortestDistance_2(int[][] grid) {
         if ( (grid == null) || (grid.length == 0) )
             return 0;
@@ -175,6 +237,6 @@ public class ShortestDistanceFromAllBuildings {
         int[][] grid3 = new int[][]
                 {{1,1,1,1,1,1,1,0},{0,0,0,0,0,0,0,1},{1,1,1,1,1,1,0,1},{1,0,0,0,1,1,0,1},
                         {1,0,1,1,1,1,0,1},{1,0,1,0,0,1,0,1},{1,0,1,1,1,1,0,1},{1,0,0,0,0,0,0,1},{0,1,1,1,1,1,1,0}};
-        System.out.println(ob.shortestDistance(grid3));
+        System.out.println(ob.shortestDistance3(grid));
     }
 }
