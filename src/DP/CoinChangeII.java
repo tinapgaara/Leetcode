@@ -1,5 +1,8 @@
 package DP;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by yingtan on 1/13/18.
  *
@@ -37,6 +40,12 @@ public class CoinChangeII {
 
     public int change(int amount, int[] coins) {
         if (coins == null) return 0;
+        Map<String, Integer> keyToCount = new HashMap<>();
+        //return recur(amount, coins, 0, keyToCount);
+        return change_dp_one_space(amount, coins);
+    }
+    public int change_dp_one_space(int amount, int[] coins) {
+        if (coins == null) return 0;
         // dp[i][amount] = dp[i-1][amount] + dp[i][amount - coins[i]]
         // dp[amount] = dp[amount] + dp[amount - coins[i]]
         int[] dp = new int[amount + 1];
@@ -49,5 +58,51 @@ public class CoinChangeII {
             }
         }
         return dp[amount];
+    }
+    public int change_dp(int amount, int[] coins) {
+        // dp[i][amount] = dp[i][amount - coins[i]] + dp[i-1][amount]
+        int[][] dp = new int[coins.length][amount+1];
+        for (int i = 0 ; i < coins.length; i ++) {
+            dp[i][0] = 1;
+            for (int j = 1; j <= amount; j ++) {
+                int usedI = 0;
+                int noUsedI = 0;
+                if (j - coins[i] >= 0) {
+                    usedI = dp[i][j - coins[i]];
+                }
+                if (i > 0) {
+                    noUsedI = dp[i-1][j];
+                }
+
+                dp[i][j] = usedI + noUsedI;
+            }
+        }
+        if (coins.length == 0) {
+            if (amount == 0) return 1;
+            else return 0;
+        }
+        return dp[coins.length-1][amount];
+    }
+    public int recur(int amount, int[] coins, int index, Map<String, Integer> keyToCount) {
+        // base case
+        if (amount < 0) return 0;
+        else if (amount == 0) {
+            keyToCount.put(amount+ "_" + index, 1);
+            return 1;
+        }
+        String key = amount + "_" + index;
+        if (keyToCount.containsKey(key)) {
+            return keyToCount.get(key);
+        }
+        int count = 0;
+        for (int i = index; i < coins.length; i ++) {
+            count = count + recur(amount - coins[i], coins, i, keyToCount);
+        }
+        keyToCount.put(key, count);
+        return count;
+    }
+    public static void main(String[] args) {
+        CoinChangeII ob = new CoinChangeII();
+        ob.change(5, new int[]{1,2, 5});
     }
 }

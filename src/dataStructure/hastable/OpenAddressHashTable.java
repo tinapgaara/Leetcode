@@ -42,7 +42,6 @@ public class OpenAddressHashTable{
 	
 	
 	 public int insert(int key, int val) {
-
 		 for(int i = 0; i < MAX_SIZE; i ++) {
 			 int hashcode = OpenAddressLinearHashFunction(key, i); // i is the hashtable's size index
 			 Bucket bucket = m_buckets[hashcode];
@@ -58,7 +57,6 @@ public class OpenAddressHashTable{
 	 }
 	 
 	 public int search(int key) {
-
 		 for(int i = 0; i < MAX_SIZE; i ++) {
 			 int hashcode = OpenAddressLinearHashFunction(key, i);
 			 Bucket bucket = m_buckets[hashcode];
@@ -75,7 +73,6 @@ public class OpenAddressHashTable{
 	 }
 	 
 	 public void delete(int key) {
-
 		 for(int i = 0;i < MAX_SIZE; i++) {
 			 int hashcode = OpenAddressLinearHashFunction(key,i);
 			 Bucket bucket = m_buckets[hashcode];

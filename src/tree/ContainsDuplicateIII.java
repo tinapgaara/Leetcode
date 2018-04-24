@@ -42,7 +42,7 @@ to simple queries can be executed both of time complexity O(lg K)
                     || (ceil != null && ceil <= nums[ind])) {
                 return true;
             }
-
+            // important !!!!
             values.add(nums[ind]);
             if (ind >= k) {
                 values.remove(nums[ind - k]);

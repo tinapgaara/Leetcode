@@ -57,28 +57,31 @@ public class PaintFence {
     }
 
     public int numWays_2(int n, int k) {
-        if (n == 0) return 0;
+        // dp[n] : total ways , same[n]: in dp[n], how many ways are same as the previous color
+        // same[n] = (dp[n-1] - same[n-1])
+        // nonsame = dp[n-1] * (k-1)
+        // dp[n] = same[n] + nonsame
+        /*
         int[] dp = new int[n];
-        int[] prevTwoSameColorsWays = new int[n];
-
-        //dp[i-2]'s color == dp[i-1]'s color
-        // prevTwoSameColorsWays[i-1] * (k-1);
-        //dp[i-2]'s color != dp[i-1]'s color
-        // (dp[i-1] - prevTwoSameColorsWays[i-1]) * k
-
-        // update current prevTwoSameColorsWays[i]: current color == prev color only when
-        // dp[i-2]'s color != dp[i-1]'s color
-        // prevTwoSameColorsWays[i] = dp[i-1] - prevTwoSameColorsWays[i-1];
-
+        int[] same = new int[n];
+        if (n == 0) return 0;
         dp[0] = k;
-        if (n == 1) return k;
-        dp[1] = k * k;
-        prevTwoSameColorsWays[1] = k;
-
-        for (int i = 2; i < n; i ++) {
-            dp[i] = prevTwoSameColorsWays[i-1] * (k-1) + (dp[i-1] - prevTwoSameColorsWays[i-1]) * k;
-            prevTwoSameColorsWays[i] = (dp[i-1] - prevTwoSameColorsWays[i-1]);
+        same[0] = 0;
+        for (int i = 1; i < n; i ++) {
+            same[i] = dp[i-1] - same[i-1];
+            int diff = dp[i-1] * (k-1);
+            dp[i] = same[i] + diff;
         }
         return dp[n-1];
+        */
+        if (n == 0) return 0;
+        int total = k;
+        int same = 0;
+        for (int i = 1; i < n; i ++) {
+            same = total - same;
+            int diff = total * (k-1);
+            total = same + diff;
+        }
+        return total;
     }
 }

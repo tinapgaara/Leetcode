@@ -22,23 +22,6 @@ public class FindKPairsWithSmallestSums {
                 queue.offer(new int[]{i, j+ 1, nums1[i] + nums2[j+1]});
             }
         }
-
-        /*
-        will cause duplicate
-        while(count < k) {
-            int[] p = queue.poll();
-            int i = p[0];
-            int j = p[1];
-            res.add(new int[]{nums1[i], nums2[j]});
-            count ++;
-            if (i + 1 < nums1.length) {
-                queue.offer(new int[]{i+1, j, nums1[i+1] + nums2[j]});
-            }
-            if (j + 1 < nums2.length) {
-                queue.offer(new int[]{i, j+1, nums1[i] + nums2[j+1]});
-            }
-        }
-        */
         return res;
     }
     public class PointComparator implements Comparator<int[]> {

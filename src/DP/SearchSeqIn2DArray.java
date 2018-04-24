@@ -57,6 +57,7 @@ public class SearchSeqIn2DArray {
             matrix_j = j;
             seq_index = index;
         }
+        //important !!!!
         @Override
         public boolean equals(Object o) {
             if (o == null || this.getClass() != o.getClass()) {

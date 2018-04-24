@@ -33,17 +33,18 @@ public class JumpGame {
         If a can not -> c, even c can -> e, there is no path like: a-> b -> e. Thus, a can not -> e.
     */
     public boolean canJumpGreedy(int[] nums) {
-
-        int last = nums.length - 1;
-        for (int i = nums.length-2; i >=0 ; i --) {
-            int curDistance = last - i ;
-            int maxJumpAtCurPos = nums[i];
-            if (maxJumpAtCurPos >= curDistance) {
-                last = i;
+        if (nums == null || nums.length == 0) return false;
+        int farest = 0;
+        for (int i = 0 ; i < nums.length; i ++) {
+            farest = Math.max(farest, i + nums[i]);
+            if (farest >= nums.length - 1) {
+                return true;
+            }
+            else if (farest == i) { // only keep the previous stage
+                return false;
             }
         }
-        if (last != 0) return false;
-        else return true;
+        return false;
     }
 
     // Solution 1; recursve: Time out of Limit

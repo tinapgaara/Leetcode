@@ -42,33 +42,42 @@ public class UniquePathII {
         }
         return dp[len - 1];
     }
-
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
-        if (obstacleGrid == null) return 0;
-
+        if (obstacleGrid == null || obstacleGrid.length == 0) return 0;
         int row = obstacleGrid.length;
-        if (row == 0) return 0;
-
         int col = obstacleGrid[0].length;
-        int[][] uniqueNumber = new int[row][col];
-
-        if (obstacleGrid[0][0] == 0) uniqueNumber[0][0] = 1;
-        else uniqueNumber[0][0] = 0;
+        if (obstacleGrid[0][0] == 0)
+            obstacleGrid[0][0] = 1;
+        else {
+            obstacleGrid[0][0] = 0;
+        }
         for (int i = 1 ; i < row; i ++) {
-            if (obstacleGrid[i][0] == 1) uniqueNumber[i][0] = 0;
-            else uniqueNumber[i][0] = uniqueNumber[i-1][0];
-        }
-        for (int i = 1 ; i < col; i ++) {
-            if (obstacleGrid[0][i] == 1) uniqueNumber[0][i] = 0;
-            else uniqueNumber[0][i] = uniqueNumber[0][i-1];
-        }
-        for (int i = 1; i < obstacleGrid.length; i ++) {
-            for (int j = 1; j < obstacleGrid[0].length ; j ++) {
-                if (obstacleGrid[i][j] == 1) uniqueNumber[i][j] = 0;
-                else uniqueNumber[i][j] = uniqueNumber[i-1][j] + uniqueNumber[i][j-1];
+            if (obstacleGrid[i][0] != 1)
+                obstacleGrid[i][0] = obstacleGrid[i-1][0];
+            else {
+                // obstacle
+                obstacleGrid[i][0] = 0;
             }
         }
-        return uniqueNumber[row-1][col-1];
-
+        for (int j = 1 ; j < col; j ++) {
+            if (obstacleGrid[0][j] != 1)
+                obstacleGrid[0][j] = obstacleGrid[0][j-1];
+            else {
+                // obstacle
+                obstacleGrid[0][j] = 0;
+            }
+        }
+        for (int i = 1; i <row; i ++) {
+            for (int j = 1; j < col; j ++) {
+                if (obstacleGrid[i][j] != 1) {
+                    obstacleGrid[i][j] = obstacleGrid[i-1][j] + obstacleGrid[i][j-1];
+                    //System.out.println(i + " " + j +" " +obstacleGrid[i][j]);
+                }
+                else {
+                    obstacleGrid[i][j] = 0;
+                }
+            }
+        }
+        return obstacleGrid[row-1][col-1];
     }
 }

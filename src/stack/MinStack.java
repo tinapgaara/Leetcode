@@ -2,52 +2,68 @@ package stack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by yingtan on 9/20/15.
  */
 public class MinStack {
 
-    private List<Integer> m_elements;
-    private int m_top;
-
+    public class MinItem {
+        int minVal;
+        int count;
+        public MinItem(int minVal, int count) {
+            this.minVal = minVal;
+            this.count = count;
+        }
+    }
+    Stack<MinItem> minStack;
+    Stack<Integer> stack;
+    /** initialize your data structure here. */
     public MinStack() {
-        m_top = -1;
-        m_elements = new ArrayList<Integer>();
+        minStack = new Stack<>();
+        stack = new Stack<>();
     }
 
     public void push(int x) {
-        int m_min;
-        if (m_elements.size() == 0) {
-            m_min = x;
+        stack.push(x);
+        if (minStack.isEmpty()) {
+            minStack.push(new MinItem(x, 1));
         }
         else {
-            m_min = getMin();
-            if (x < m_min) {
-                m_min = x;
+            int oldmin = minStack.peek().minVal;
+            if (x < oldmin) {
+                minStack.push(new MinItem(x, 1));
+            }
+            else if (x == oldmin) {
+                minStack.peek().count = minStack.peek().count + 1;
             }
         }
-        m_elements.add(x);
-        m_top ++;
-
-        m_elements.add(m_min);
-        m_top ++;
     }
 
     public void pop() {
-        m_elements.remove(m_top);
-        m_top --;
-        m_elements.remove(m_top);
-        m_top --;
+        int popNum = -1;
+        if (! stack.isEmpty()) {
+            popNum = stack.pop();
+            if (popNum == minStack.peek().minVal) {
+                minStack.peek().count = minStack.peek().count - 1;
+                if (minStack.peek().count == 0) {
+                    minStack.pop();
+                }
+            }
+        }
+        return;
     }
 
     public int top() {
-        return m_elements.get(m_top - 1);
+        return stack.peek();
     }
 
     public int getMin() {
-        System.out.println(m_top);
-        return m_elements.get(m_top);
+        if (! minStack.isEmpty()) {
+            return minStack.peek().minVal;
+        }
+        return -1;
     }
 
     public static void main(String[] args) {

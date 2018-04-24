@@ -26,5 +26,9 @@ public class PowXY {
         else {
             return half * half * x; // pow(x, n % 2)  -> x (because any number divide by 2: division is 0 or 1)
         }
+
     }
+
+
+
 }

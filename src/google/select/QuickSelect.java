@@ -5,53 +5,50 @@ package google.select;
  */
 public class QuickSelect {
 
-    public int select(int[] nums, int k, int low, int high) {
-        if (low > high) {
-            return -1;
+    public int selectK(int[] nums, int k) {
+        int low = 0;
+        int high = nums.length - 1;
+        while(low < high) {
+            int index = partition(nums, low, high);
+            if (index == k) {
+                return nums[index];
+            }
+            else if (index > k) {
+                high = index - 1;
+            }
+            else {
+                low = index + 1;
+            }
         }
-
-        int pivot = partition(nums, low, high);
-        if (pivot == k) { // pivot has been put to the correct position
-            return nums[pivot];
-        }
-        else if (k > pivot) {
-            if (pivot < high)
-                return select(nums, k, pivot, high);
-
-        }
-        else {
-            if (low < pivot - 1) // ensure that gap >= 1 between low and high
-                return select(nums, k, low, pivot-1);
-        }
-        return -1;// can not find
+        return -1;
     }
 
     public int partition(int[] nums, int low, int high) {
-        int med = (low + high) /2;
-        int i = low;
-        int j = high;
-        int pivot = nums[med];
-        while (i <= j) {
-            while (nums[i] < pivot) {
-                i ++;
-            }
-            while (nums[j] > pivot) {
-                j --;
-            }
-            if (i <= j) {
-                int temp = nums[i];
-                nums[i] = nums[j];
-                nums[j] = temp;
-                i++;
-                j--;
+        int pivotindex = low + (high - low) / 2;
+        int pivot = nums[pivotindex];
+        int tmp = nums[high];
+        nums[high] = pivot;
+        nums[pivotindex] = tmp;
+
+        int firstHalf = low;
+        pivot = nums[high];
+        for (int i = low; i < high; i++) {
+            if (nums[i] <= pivot) {
+                tmp = nums[firstHalf];
+                nums[firstHalf] = nums[i];
+                nums[i] = tmp;
+                firstHalf ++;
             }
         }
-        return i;
+        tmp = nums[firstHalf];
+        nums[firstHalf] = nums[high];
+        nums[high] = tmp;
+        return firstHalf;
     }
 
     public static void main(String[] args) {
         QuickSelect ob = new QuickSelect();
         int[] nums = new int[]{4,3,1,2};
-        System.out.println(ob.select(nums, 1, 0, nums.length-1));
+        System.out.println(ob.selectK(nums, 1));
     }
 }

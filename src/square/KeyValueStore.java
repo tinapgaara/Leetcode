@@ -8,7 +8,7 @@ import java.util.HashMap;
  * 题目很straightforward : design key-value store   I am using Java and can use Map data structure.
  * Design APIs like put(K key, V value), get(K key), remove(), isEmpty(), size()
  * After that writing some test-cases and just print out the result
- * The follow-up is : realize another API : V getTimerValue(K key, Long time), assistant function :
+ * The follow-up is : realize another APIToAddPoint : V getTimerValue(K key, Long time), assistant function :
  * System.nanoTimer();
  * Basically, whenever you do put(K,V) function,
  * record the time, and when calling the getTimerValue() function to see if at a specfic time,
